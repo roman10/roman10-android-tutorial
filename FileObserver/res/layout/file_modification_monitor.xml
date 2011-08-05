@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+  <RelativeLayout android:id="@+id/RelativeLayout01" 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent">
+   
+   		<TableLayout android:id="@+id/file_modification_monitor_buttons" 
+   			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"		
+			android:layout_alignParentBottom="true">
+			<TableRow
+				android:gravity="center">
+				<Button android:id="@+id/file_modification_monitor_btn_first" 
+				  	android:text="Start"
+				  	android:textStyle="bold"
+					android:layout_height="wrap_content" 
+					android:layout_weight="1"
+					android:gravity="center"
+					/>	
+				<Button android:id="@+id/file_modification_monitor_btn_second" 
+				  	android:text="Stop"
+				  	android:textStyle="bold"
+					android:layout_height="wrap_content" 
+					android:layout_weight="2"
+					android:gravity="center"
+					/>	
+				<Button android:id="@+id/file_modification_monitor_btn_third" 
+				  	android:text="Refresh"
+				  	android:textStyle="bold"
+					android:layout_height="wrap_content" 
+					android:layout_weight="1"
+					android:gravity="center"
+					/>
+				<Button android:id="@+id/file_modification_monitor_btn_forth" 
+				  	android:text="Clear"
+				  	android:textStyle="bold"
+					android:layout_height="wrap_content" 
+					android:layout_weight="1"
+					android:gravity="center"
+					/>
+		  	</TableRow>
+		</TableLayout>
+	 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android" 
+	     android:scrollbars="vertical" 
+	     android:layout_height="fill_parent" 
+	     android:layout_width="fill_parent"
+	     android:gravity="center_horizontal"
+	     android:layout_alignParentTop="true"
+	     android:layout_above="@id/file_modification_monitor_buttons">
+	  <TextView android:id="@+id/file_modification_monitor_log"
+	     android:layout_width="fill_parent" 
+	     android:layout_height="fill_parent"
+	     />     
+	  </ScrollView>
+	</RelativeLayout>
+</LinearLayout>
