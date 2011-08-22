@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+	<Spinner android:id="@+id/spinner_calendar"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		/>
+	<Button android:id="@+id/button_add"
+		android:layout_height="wrap_content"
+		android:layout_width="150px"
+		android:text="Add Event"
+		android:layout_gravity="center"
+		android:gravity="center"
+	/>
+	<Button android:id="@+id/button_add2"
+		android:layout_height="wrap_content"
+		android:layout_width="150px"
+		android:text="Add Event 2"
+		android:layout_gravity="center"
+		android:gravity="center"
+	/>
+	<Button android:id="@+id/button_get_events"
+		android:layout_height="wrap_content"
+		android:layout_width="150px"
+		android:text="Get Events"
+		android:layout_gravity="center"
+		android:gravity="center"
+	/>
+	<TextView  
+	    android:id="@+id/text_event"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:text="@string/hello"
+	    />
+</LinearLayout>
