@@ -217,8 +217,8 @@ public class Main extends Activity {
     		int l_colEnd = l_managedCursor.getColumnIndex(l_projection[1]);
     		do {
     			l_title = l_managedCursor.getString(l_colTitle);
-    			l_begin = l_managedCursor.getString(l_colBegin);
-    			l_end = l_managedCursor.getString(l_colEnd);
+    			l_begin = getDateTimeStr(l_managedCursor.getString(l_colBegin));
+    			l_end = getDateTimeStr(l_managedCursor.getString(l_colEnd));
     			l_displayText.append(l_title + "\n" + l_begin + "\n" + l_end + "\n----------------\n");
     			++l_cnt;
     		} while (l_managedCursor.moveToNext() && l_cnt < 3);
@@ -240,4 +240,9 @@ public class Main extends Activity {
 			return sdf.format(l_time);
 		}
 	}
+    public static String getDateTimeStr(String p_time_in_millis) {
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
+    	Date l_time = new Date(Long.parseLong(p_time_in_millis));
+    	return sdf.format(l_time);
+    }
 }
