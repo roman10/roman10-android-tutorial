@@ -11,11 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class TabMenu extends PopupWindow {
+public class TabMenu extends roman10.tutorial.tabmenu.PopupWindow {
 	private GridView mGridMenu, mGridMenuItem;
 	private LinearLayout mLayout;
 	private MneuAdapter mMenuAdapter;
@@ -58,6 +57,7 @@ public class TabMenu extends PopupWindow {
 		this.setHeight(LayoutParams.WRAP_CONTENT);
 		this.setBackgroundDrawable(new ColorDrawable(pBgColor));
 		this.setAnimationStyle(pAniTabMenu);
+		this.setOutsideTouchable(true);
 		this.setFocusable(true);
 	}
 	

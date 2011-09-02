@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -44,7 +43,7 @@ public class Main extends Activity {
         		"Create", "SeShare", 
         }, new int[] {R.drawable.mainmenu_secret, R.drawable.mainmenu_share}, 10, 0xFFFFFFFF);
         
-        mTabMenu = new TabMenu(this, new MenuClickEvent(), new MenuItemClickEvent(), 
+        mTabMenu = new TabMenu(this, new MenuClickEventListener(), new MenuItemClickEventListener(), 
         		mMenuAdapter, 0x55123456, R.style.PopupAnimation);
         mTabMenu.update();
         mTabMenu.setMenuSelected(0);
@@ -52,7 +51,7 @@ public class Main extends Activity {
         mTabMenu.setMenuItemAdapter(mMenuItemAdapters[0]);
     }
     
-    class MenuClickEvent implements OnItemClickListener {
+    class MenuClickEventListener implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
@@ -62,7 +61,7 @@ public class Main extends Activity {
 		}
     }
     
-    class MenuItemClickEvent implements OnItemClickListener {
+    class MenuItemClickEventListener implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
@@ -86,22 +85,4 @@ public class Main extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
-    
-    /*@Override  
-    public boolean onCreateOptionsMenu(Menu menu) {  
-        menu.add("menu");
-        return super.onCreateOptionsMenu(menu);  
-    }  
-    @Override  
-    public boolean onMenuOpened(int featureId, Menu menu) {  
-        if (mTabMenu != null) {  
-            if (mTabMenu.isShowing())  
-            	mTabMenu.dismiss();  
-            else {  
-            	mTabMenu.showAtLocation(findViewById(R.id.LinearLayout01),  
-                        Gravity.BOTTOM | Gravity.CENTER, 0, 0);  
-            }  
-        }  
-        return false;
-    }  */
 }
