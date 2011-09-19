@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dialog_settings_encoding_format_array">    
+        <item>H263</item>
+        <item>MP4-SP</item>
+        <item>H264</item>
+    </string-array> 
+    <string-array name="dialog_settings_container_format_array">
+        <item>3gp</item>
+        <item>mp4</item>
+    </string-array> 
+    <string-array name="dialog_settings_resolution_array">
+        <item>176x144</item>
+        <item>320x240</item>
+        <item>720x480</item>
+    </string-array> 
+</resources>

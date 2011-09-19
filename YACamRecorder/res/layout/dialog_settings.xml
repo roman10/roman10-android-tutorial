@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	>	
+  <ScrollView xmlns:android="http://schemas.android.com/apk/res/android" 
+	     android:scrollbars="vertical" 
+	     android:layout_height="fill_parent" 
+	     android:layout_width="fill_parent">
+	<LinearLayout 
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:paddingLeft="20dip"
+		android:paddingRight="20dip">
+	<TextView android:id="@+id/dialog_settings_num_text" 
+		    android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="gone"
+      		android:singleLine="true" />
+    <View 
+       style="@style/filler_15dip"
+    /> 
+	<TextView 
+		android:id="@+id/dialog_settings_encoding_format_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Encoder:"
+		android:typeface="serif"
+		android:textStyle="bold"
+		android:visibility="visible"
+		android:gravity="left"
+	/>
+	<Spinner android:id="@+id/dialog_settings_encoding_format_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+    />
+	<TextView 
+		android:id="@+id/dialog_settings_name_container_format_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Container:"
+		android:typeface="serif"
+		android:textStyle="bold"
+		android:visibility="visible"
+		android:gravity="left"
+		/>
+	<Spinner android:id="@+id/dialog_settings_container_format_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+    />
+    <TextView 
+		android:id="@+id/dialog_settings_name_resolution_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Resolution"
+		android:typeface="serif"
+		android:textStyle="bold"
+		android:visibility="visible"
+		android:gravity="left"
+		/>
+	<Spinner android:id="@+id/dialog_settings_resolution_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+    />
+	<TableLayout android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:paddingTop="20dip">
+		<TableRow android:gravity="center_horizontal">
+			<Button android:id="@+id/dialog_settings_btn1" 
+			  	android:text="Update"
+				android:layout_width="100dip"
+				android:layout_height="wrap_content" />
+			<Button android:id="@+id/dialog_settings_btn2" 
+			  	android:text="Cancel"
+				android:layout_width="100dip"
+				android:layout_height="wrap_content" />
+		</TableRow>
+	</TableLayout>
+	 <View 
+       style="@style/filler_15dip"
+    /> 
+	</LinearLayout>
+  </ScrollView>
+</LinearLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent">
+	<TableLayout android:id="@+id/main_btns" 
+   			android:layout_width="fill_parent" 
+			android:layout_height="50dip"		
+			android:layout_alignParentBottom="true"
+			>
+			<TableRow
+				android:gravity="center">
+				<Button android:id="@+id/main_btn1" 
+				  	android:text="Start"
+				  	style="@style/btn_bottommenu"
+					/>	
+				<Button android:id="@+id/main_btn2" 
+				  	android:text="Settings"
+				  	style="@style/btn_bottommenu"
+					/>	
+				<Button android:id="@+id/main_btn3" 
+				  	android:text="All"
+				  	android:visibility="gone"
+				  	style="@style/btn_bottommenu"
+					/>
+				<Button android:id="@+id/main_btn4" 
+				  	android:text="Add"
+				  	android:visibility="gone"
+				  	style="@style/btn_bottommenu"
+					/>
+		  	</TableRow>
+	</TableLayout>
+	<SurfaceView android:id="@+id/surface_camera"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_above="@id/main_btns"
+		>
+	</SurfaceView>
+	
+</RelativeLayout>
