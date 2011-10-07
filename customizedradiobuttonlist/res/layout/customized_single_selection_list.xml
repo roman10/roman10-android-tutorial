@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content">
+  <RelativeLayout
+  	android:layout_width="fill_parent" 
+	android:layout_height="wrap_content"> 
+  		<TableLayout android:id="@+id/single_selection_buttons" 
+  			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"	
+			android:layout_alignParentBottom="true"
+			>
+		<TableRow
+			android:gravity="center">
+			<Button android:id="@+id/single_selection_btn_first" 
+			  	android:text="Ok"
+			  	android:textStyle="bold"
+			  	android:layout_width="100dip"
+				android:layout_height="wrap_content" 
+				android:layout_weight="1"
+				android:gravity="center"
+				/>	
+			<Button android:id="@+id/single_selection_btn_second" 
+			  	android:text="Cancel"
+			  	android:textStyle="bold"
+			  	android:layout_width="100dip"
+				android:layout_height="wrap_content" 
+				android:layout_weight="1"
+				android:gravity="center"
+				/>	
+	  	</TableRow>
+	  </TableLayout>
+	  <TextView android:id="@+id/single_selection_chkbox_default_text"
+	          android:layout_width="fill_parent"
+	          android:layout_height="wrap_content"
+	          android:paddingLeft="15dip"
+	          android:paddingRight="15dip"
+	          android:layout_above="@id/single_selection_buttons"
+	          />
+	  <TableLayout  
+	  		android:id="@+id/single_selection_chkbox_table"
+   			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"	
+			android:layout_above = "@id/single_selection_chkbox_default_text"	
+			>
+	  	<TableRow
+			android:gravity="center_horizontal"
+			android:layout_gravity="center_vertical">
+			<CheckBox android:id="@+id/single_selection_chkbox_default"
+				android:text="Always choose this"
+				android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:checked="false"
+			/>
+		</TableRow>
+	</TableLayout>
+	  	<ListView android:id="@android:id/list"
+		     android:layout_width="fill_parent" 
+		     android:layout_height="fill_parent"
+		     android:drawSelectorOnTop="true"
+		     android:layout_above="@id/single_selection_chkbox_table"
+		     android:clickable="true"
+		     /> 
+	</RelativeLayout>
+</LinearLayout>

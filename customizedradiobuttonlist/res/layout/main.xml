@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+	<Button  
+		android:id="@+id/android_default"
+		android:text="Android Default"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    />
+	<Button  
+    	android:id="@+id/single_selection"
+    	android:text="Single Selection List"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    />
+	<Button  
+		android:id="@+id/customized"
+		android:text="Cutomized List"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    />
+    <Button  
+    	android:id="@+id/more_apps"
+    	android:text="My Apps"
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    />
+</LinearLayout>
