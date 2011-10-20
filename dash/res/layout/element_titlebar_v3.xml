@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  style="@style/titlebar_short">
+    <ImageButton android:id="@+id/titlebar_left_btn1" 
+  		style="@style/titlebar_btn_short"
+  		android:visibility="gone">
+  	</ImageButton>
+  	<ImageView android:id="@+id/titlebar_left_sep"
+  		style="@style/titlebar_separator"
+  		android:visibility="gone"></ImageView>
+  	<TextView android:id="@+id/titlebar_text"
+  		style="@style/titlebar_text_short"
+  		android:visibility="gone">
+  	</TextView>
+  	<View style="@style/titlebar_spring" 
+  		/>
+  	<ImageView android:id="@+id/titlebar_right_sep3"
+  		style="@style/titlebar_separator"
+  		android:visibility="gone"></ImageView>
+  	<ImageButton android:id="@+id/titlebar_right_btn3" 
+  		style="@style/titlebar_btn_short"
+  		android:visibility="gone">
+  	</ImageButton>
+  	<ImageView android:id="@+id/titlebar_right_sep2"
+  		style="@style/titlebar_separator"
+  		android:visibility="gone"></ImageView>
+  	<ImageButton android:id="@+id/titlebar_right_btn2" 
+  		style="@style/titlebar_btn_short"
+  		android:visibility="gone">
+  	</ImageButton>
+  	<ImageView style="@style/titlebar_separator"></ImageView>
+  	<ImageButton android:id="@+id/titlebar_right_btn1" 
+  		style="@style/titlebar_btn_short">
+  	</ImageButton>
+</LinearLayout>

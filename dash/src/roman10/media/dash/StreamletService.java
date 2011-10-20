@@ -40,7 +40,9 @@ public class StreamletService extends Service {
 	
 	@Override
 	public void onStart(Intent intent, int startid) {
-		
+		Log.i("onStart", "start generating streamlet");
+		generateStreamletTask genStreamletTask = new generateStreamletTask();
+		genStreamletTask.execute(null);
 	}
 	
 	@Override
@@ -121,75 +123,58 @@ public class StreamletService extends Service {
 		protected Object doInBackground(Object... arg0) {
 			 try {
 				//0. calculate roughly how many streamlets we'll generate, this is for report the progress
-				Main.mTotalNumStreamlets = 0;
-				Main.mCurrProcessStreamletNum = 0;
-				for (int fi = 0; fi < Main.displayEntries.size(); ++fi) {
-					if (Main.mSelected.get(fi)) {
-						Main.mTotalNumStreamlets = getVideoLengthInSeconds(Main.displayEntries.get(fi).getText())/STREAMLET_INTERVAL + 1;
+				VideoBrowser.mTotalNumStreamlets = 0;
+				VideoBrowser.mCurrProcessStreamletNum = 0;
+				for (int fi = 0; fi < VideoBrowser.displayEntries.size(); ++fi) {
+					if (VideoBrowser.mSelected.get(fi)) {
+						VideoBrowser.mTotalNumStreamlets = getVideoLengthInSeconds(VideoBrowser.displayEntries.get(fi).getText())/STREAMLET_INTERVAL + 1;
 					}
 				}
 				//1. generate the streamlets 
-				for (int fi = 0; fi < Main.displayEntries.size(); ++fi) {
-					if (Main.mSelected.get(fi)) {
-						Movie movie = new MovieCreator().build(new IsoBufferWrapperImpl(new File(Main.displayEntries.get(fi).getText())));
+				for (int fi = 0; fi < VideoBrowser.displayEntries.size(); ++fi) {
+					if (VideoBrowser.mSelected.get(fi)) {
+						Movie movie = new MovieCreator().build(new IsoBufferWrapperImpl(new File(VideoBrowser.displayEntries.get(fi).getText())));
 
 						List<Track> tracks = movie.getTracks();
 						movie.setTracks(new LinkedList<Track>());//remove all tracks we will create new tracks from the old
-						
-						double startTime = 15.000;
-						double endTime = 45.000;
-						boolean timeCorrected = false;
-						
-						//here we try to find a track that has sync samples. Since we can only start decoding
-						//at such a sample we SHOULD make sure that the start of the new fragment is exactly 
-						//such a frame
+
+						//the algo works as below,
+						//0. set startSyncSample as 0
+						//1. get the end sync frame (endSyncSample) which will be more 10 seconds away
+						//2. cropped the video from [startSyncSample,endSyncSample)
+						//3. set startSyncSample as endSyncSample and start from 1 again.
 						for (Track track : tracks) {
-							long[] syncSamples = track.getSyncSamples();
-							if (syncSamples != null && syncSamples.length > 0) {
-								for (int i = 0; i < syncSamples.length; ++i) {
-									Log.i("dash-main-syncSample", syncSamples[i] + ":");
-								}
-								getDecodingTimeForSyncSamples(track);
-								startTime = correctTimeToNextSyncSample(startTime);
-								endTime = correctTimeToNextSyncSample(endTime);
-								timeCorrected = true;
-							}
-						}
-						for (Track track : tracks) {
+							track.getDecodingTimeEntries();
+							//get the start sync sample and end sync sample
 							long currentSample = 0;
+							double startTime = 0;
 							double currentTime = 0;
-							long startSample = -1;
-							long endSample = -1;
+							long startSyncSample = 0;
 							for (int i = 0; i < track.getDecodingTimeEntries().size(); ++i) {
-								TimeToSampleBox.Entry entry = track.getDecodingTimeEntries().get(i);
-								for (int j = 0; j < entry.getCount(); ++j) {
-									//entry.getDelta() is the amount of time the current sample covers
-									if (currentTime <= startTime) {
-										//current sample is still before the new starttime
-										startSample = currentSample;
-									}
-									if (currentTime <= endTime) {
-										//current sample is after the new start time and still before the 
-										//new endtime
-										endSample = currentSample;
-									} else {
-										//current sample is after the end of the cropped video
-										break;
-									}
-									currentTime += (double) entry.getDelta() / (double)track.getTrackMetaData().getTimescale();
-									currentSample++;
-								}
-							}
-							movie.addTrack(new CroppedTrack(track, startSample, endSample));
+					    		TimeToSampleBox.Entry lEntry = track.getDecodingTimeEntries().get(i);
+					    		for (int j = 0; j < lEntry.getCount(); ++j) {
+					    			//check if the current sample is one of the sync sample, if so, put it into timeOfSyncSamples
+					    			currentTime += (double) lEntry.getDelta() / (double) track.getTrackMetaData().getTimescale();
+					    			currentSample++;
+					    			if (currentTime - startTime > STREAMLET_INTERVAL) {
+					    				//check if the next sample is a sync sample, if so, we crop the track
+					    				if (Arrays.binarySearch(track.getSyncSamples(), currentSample + 1) >= 0) {
+					    					movie.addTrack(new CroppedTrack(track, startSyncSample, currentSample));
+					    					IsoFile out = new DefaultMp4Builder().build(movie);
+											FileOutputStream fos = new FileOutputStream(new File(String.format("/sdcard/r10videocam/output-%f-%f.mp4", startTime, currentTime)));
+											Log.i("StreamletService", String.format("/sdcard/r10videocam/output-%f-%f.mp4", startTime, currentTime));
+											out.getBox(new IsoOutputStream(fos));
+											fos.close();
+											movie.setTracks(new LinkedList<Track>());//remove all tracks we will create new tracks from the old
+					    				}
+					    			}
+					    		}
+					    	}
 						}
-						IsoFile out = new DefaultMp4Builder().build(movie);
-						FileOutputStream fos = new FileOutputStream(new File(String.format("/sdcard/r10videocam/output-%f-%f.mp4", startTime, endTime)));
-						out.getBox(new IsoOutputStream(fos));
-						fos.close();
 					}
 				}
 	        } catch (IOException e) {
-				Log.e("Main-onCreate", e.getMessage());
+				Log.e("VideoBrowser-onCreate", e.getMessage());
 			}
 			return null;
 		}

@@ -1,7 +1,6 @@
 package roman10.ui.iconifiedtextselectedlist;
 
-import roman10reborn.topsecret.main.R;
-import roman10reborn.topsecret.settings.SettingsStatic;
+import roman10.media.dash.R;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -48,7 +47,8 @@ public class IconifiedTextSelectedView extends LinearLayout {
 		//mIcon.setFocusable(false);
 		//mIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
         //mIcon.setLayoutParams(new LayoutParams(90, 90));
-		int thumbOption = SettingsStatic.getThumbOption(context);
+//		int thumbOption = SettingsStatic.getThumbOption(context);
+		int thumbOption = 0;
 		if (thumbOption == 0) {
 			icon_size_width = 85;
 			icon_size_height = 85;

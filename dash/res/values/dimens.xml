@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="titlebar_height">50dip</dimen>
+	<dimen name="titlebar_height_sub">45dip</dimen>
+	<dimen name="titlebar_textsize">25dip</dimen>
+	<dimen name="titlebar_height_short">40dip</dimen>
+	<dimen name="titlebar_height_short_sub">30dip</dimen>
+	<dimen name="titlebar_textsize_short">14dip</dimen>
+</resources>
