@@ -32,10 +32,10 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
     private SurfaceView prSurfaceView;
     private Button prStartBtn;
     private Button prSettingsBtn;
+    private Button prFinishBtn;
     private boolean prRecordInProcess;
     private SurfaceHolder prSurfaceHolder;
     private Camera prCamera;
-	private final String cVideoFilePath = "/sdcard/r10videocam/";
     
 	private Context prContext;
     @Override
@@ -44,10 +44,11 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         prContext = this.getApplicationContext();
         setContentView(R.layout.videocapture);
-        FileUtilsStatic.createDirIfNotExist(cVideoFilePath);
+        FileUtilsStatic.createDirIfNotExist(FileUtilsStatic.DEFAULT_DIR);
         prSurfaceView = (SurfaceView) findViewById(R.id.surface_camera);
         prStartBtn = (Button) findViewById(R.id.main_btn1);
         prSettingsBtn = (Button) findViewById(R.id.main_btn2);
+        prFinishBtn = (Button) findViewById(R.id.main_btn3);
         prRecordInProcess = false;
         prStartBtn.setOnClickListener(new View.OnClickListener() {
 			//@Override
@@ -65,6 +66,12 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 				Intent lIntent = new Intent();
 				lIntent.setClass(prContext, roman10.media.camcorder.SettingsDialog.class);
 				startActivityForResult(lIntent, REQUEST_DECODING_OPTIONS);
+			}
+		});
+        prFinishBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				setResult(RESULT_OK);
+				finish();
 			}
 		});
         prSurfaceHolder = prSurfaceView.getHolder();
@@ -175,7 +182,7 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 				lDisplayMsg += "H263\n";
 				prMediaRecorder.setVideoEncoder(VideoEncoder.H263);
 			}
-			lVideoFileFullPath = cVideoFilePath + String.valueOf(System.currentTimeMillis()) + lVideoFileFullPath;
+			lVideoFileFullPath = FileUtilsStatic.DEFAULT_DIR + String.valueOf(System.currentTimeMillis()) + lVideoFileFullPath;
 			prRecordedFile = new File(lVideoFileFullPath);
 			prMediaRecorder.setOutputFile(prRecordedFile.getPath());
 			int lRes = SettingsStatic.getResolutionChoice(this.getApplicationContext());

@@ -503,16 +503,16 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	public static final String pucVideoFileNameList = "pucVideoFileName";
 	private void showContextMenuForFile(final File _file, final int _pos) {
 		currentFile = _file;
-		final CharSequence[] l_item;
+		final CharSequence[] l_items;
 		final boolean l_selected = VideoBrowser.isEntrySelected(_pos);
 		if (l_selected) {
-			l_item = items2;
+			l_items = items2;
 		} else {
-			l_item = items;
+			l_items = items;
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Choose an Action");
-		builder.setItems(items, new DialogInterface.OnClickListener() {
+		builder.setItems(l_items, new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int item) {
 		    	switch (item) {
 		    	case CON_SEL_UNSEL:

@@ -18,8 +18,7 @@
 				  	style="@style/footbar_btn_short2"
 					/>	
 				<Button android:id="@+id/main_btn3" 
-				  	android:text="All"
-				  	android:visibility="gone"
+				  	android:text="Finish"
 				  	style="@style/footbar_btn_short2"
 					/>
 				<Button android:id="@+id/main_btn4" 
