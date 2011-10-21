@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import roman10.utils.FileUtilsStatic;
+
 import com.coremedia.iso.IsoBufferWrapperImpl;
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.IsoOutputStream;
@@ -161,15 +163,31 @@ public class StreamletService extends Service {
 					    				if (Arrays.binarySearch(track.getSyncSamples(), currentSample + 1) >= 0) {
 					    					movie.addTrack(new CroppedTrack(track, startSyncSample, currentSample));
 					    					IsoFile out = new DefaultMp4Builder().build(movie);
-											FileOutputStream fos = new FileOutputStream(new File(String.format("/sdcard/r10videocam/output-%f-%f.mp4", startTime, currentTime)));
-											Log.i("StreamletService", String.format("/sdcard/r10videocam/output-%f-%f.mp4", startTime, currentTime));
+											FileOutputStream fos = new FileOutputStream(new File(String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime)));
+											Log.i("StreamletService", String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime));
 											out.getBox(new IsoOutputStream(fos));
 											fos.close();
 											movie.setTracks(new LinkedList<Track>());//remove all tracks we will create new tracks from the old
+											startTime = currentTime;
+											startSyncSample = currentSample + 1;
+											++VideoBrowser.mCurrProcessStreamletNum;
+											this.publishProgress();
 					    				}
 					    			}
 					    		}
 					    	}
+							//check if we still have some sample left
+							if (currentTime - startTime > 0.00001f || currentSample > startSyncSample) {
+								//generate the last streamlet
+								movie.addTrack(new CroppedTrack(track, startSyncSample, currentSample));
+		    					IsoFile out = new DefaultMp4Builder().build(movie);
+								FileOutputStream fos = new FileOutputStream(new File(String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime)));
+								Log.i("StreamletService", String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime));
+								out.getBox(new IsoOutputStream(fos));
+								fos.close();
+								++VideoBrowser.mCurrProcessStreamletNum;
+								this.publishProgress();
+							}
 						}
 					}
 				}
@@ -181,11 +199,12 @@ public class StreamletService extends Service {
 		
 		@Override
 		protected void onProgressUpdate(Integer... progress) {
-			
+			VideoBrowser.updateGeneratingStreamletProgress();
 		}
 		
 		@Override
 		protected void onPostExecute(Object res) {
+			VideoBrowser.finishGeneratingStreamlet();
 			stopService();		//finish the service
 		}
 	}

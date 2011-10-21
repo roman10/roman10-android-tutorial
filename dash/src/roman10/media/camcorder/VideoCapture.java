@@ -119,7 +119,7 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 	}
 	
 	private MediaRecorder prMediaRecorder;
-	private final int cMaxRecordDurationInMs = 30000;
+	private final int cMaxRecordDurationInMs = 300000;
 	private final long cMaxFileSizeInBytes = 5000000;
 	private final int cFrameRate = 20;
 	private File prRecordedFile;

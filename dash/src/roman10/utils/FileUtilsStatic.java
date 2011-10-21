@@ -21,6 +21,7 @@ import android.util.Log;
 public class FileUtilsStatic {
 	private static final String TAG = "FileUtilsStatic";
 	public static final String DEFAULT_DIR = "/sdcard/adash/";
+	public static final String DEFAULT_STREAMLET_DIR = DEFAULT_DIR + "streamlet/";
 
 	public static boolean is_external_storage_available() {
 		//String test = Environment.getExternalStorageState();
@@ -94,6 +95,7 @@ public class FileUtilsStatic {
 	
 	public static void initDirs() {
 		createDirIfNotExist(DEFAULT_DIR);
+		createDirIfNotExist(DEFAULT_STREAMLET_DIR);
 	}
 	
 	

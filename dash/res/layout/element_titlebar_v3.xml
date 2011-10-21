@@ -4,11 +4,11 @@
   style="@style/titlebar_short">
     <ImageButton android:id="@+id/titlebar_left_btn1" 
   		style="@style/titlebar_btn_short"
-  		android:visibility="gone">
+  		>
   	</ImageButton>
   	<ImageView android:id="@+id/titlebar_left_sep"
   		style="@style/titlebar_separator"
-  		android:visibility="gone"></ImageView>
+  		></ImageView>
   	<TextView android:id="@+id/titlebar_text"
   		style="@style/titlebar_text_short"
   		android:visibility="gone">

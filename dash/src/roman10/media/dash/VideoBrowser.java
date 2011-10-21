@@ -33,6 +33,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
@@ -40,10 +41,7 @@ import android.widget.AbsListView.OnScrollListener;
 public class VideoBrowser extends ListActivity implements ListView.OnScrollListener {
 
 	private Context mContext;
-	public static VideoBrowser self;
-	public static long mTotalNumStreamlets;
-    public static long mCurrProcessStreamletNum;
-	
+	public static VideoBrowser self;	
 	/**
 	 * activity life cycle: this part of the source code deals with activity life cycle
 	 */
@@ -138,6 +136,12 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 				//if it's already loading secrets, ignore the request
 				return;
 			}
+			//hide or show the navi back button
+			if (_dir.compareTo(FileUtilsStatic.DEFAULT_DIR) == 0) {
+				btn_titlebar_left_btn1.setVisibility(View.GONE);
+			} else {
+				btn_titlebar_left_btn1.setVisibility(View.VISIBLE);
+			}
 			loadTask = new LoadImageVideoTask();
 			loadTask.execute(_dir);
 		} catch (Exception e) {
@@ -145,7 +149,8 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		}
 	}
 	
-	private void getVideosFromDirectoryNonRecur(File _dir) {
+	private void getVideosFromDirectoryNonRecur(File _dir, boolean _includeFolder) {
+		Drawable folderIcon = this.getResources().getDrawable(R.drawable.folder);
 		//add the 
 		if (!_dir.isDirectory()) {
 			return;
@@ -157,7 +162,13 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		Drawable videoIcon = null;
 		int l_iconType = 0;
 		for (File currentFile : files) {
-			if (!currentFile.isDirectory()) {
+			if (currentFile.isDirectory() && _includeFolder) {
+				//if it's a directory
+				VideoBrowser.displayEntries.add(new IconifiedTextSelected(
+						currentFile.getPath(),
+						folderIcon, false, false, 0, -1, 1));
+				mSelected.add(false);
+			} else {
 				String l_filename = currentFile.getName();
 				if (checkEndsWithInStringArray(l_filename,
 							getResources().getStringArray(R.array.fileEndingVideo))) {
@@ -201,7 +212,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 			File l_root = new File(params[0]);
 			if (l_root.isDirectory()) {
 				number_of_icons = 0;
-				getVideosFromDirectoryNonRecur(new File(FileUtilsStatic.DEFAULT_DIR));
+				getVideosFromDirectoryNonRecur(new File(params[0]), true);
 			}
 			return null;
 		}
@@ -220,13 +231,20 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	 * UI: this part of the source code deals with UI
 	 */
 	//bottom menu
-	private int currentFocusedBtn = 1;
 	private Button btn_bottommenu1;
 	private Button btn_bottommenu2;
 	private Button btn_bottommenu3;
 	//title bar
 	private TextView text_titlebar_text;
 	private ImageButton btn_titlebar_right_btn1;
+	private ImageButton btn_titlebar_left_btn1;
+	//progress report
+	public static ProgressBar bar_progress;
+	public static TextView text_progress;
+	private static boolean generateStreamletInProgress = false, uploadInProgress = false;
+	private static int mNumOfSelectedVideos = 0;
+	public static long mTotalNumStreamlets;
+    public static long mCurrProcessStreamletNum;
 	private void initUI() {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.video_browser);
@@ -247,6 +265,14 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		btn_bottommenu2.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				/*generate streamlet*/
+				//count the number of entries selected
+				mNumOfSelectedVideos = getNumOfEntriesSelected();
+				if(mNumOfSelectedVideos == 0) {
+					Toast.makeText(mContext, "No Video is Selected!", Toast.LENGTH_SHORT).show();
+					return;
+				} else {
+					startGeneratingStreamlet();
+				}
 			}
 		});
 		btn_bottommenu3 = (Button) findViewById(R.id.video_browser_btn3);
@@ -255,12 +281,22 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 			public void onClick(View v) {
 				/*upload video*/
 				//count the number of entries selected
-				int l_selected = getNumOfEntriesSelected();
-				if(l_selected == 0) {
-					Toast.makeText(mContext, "No Video is Selected!", Toast.LENGTH_SHORT).show();
+				mNumOfSelectedVideos = getNumOfEntriesSelected();
+				if(mNumOfSelectedVideos == 0) {
+					Toast.makeText(mContext, "No Video is Selected to upload!", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				//if there're videos selected, start
+			}
+		});
+		btn_titlebar_left_btn1 = (ImageButton) findViewById(R.id.titlebar_left_btn1);
+		btn_titlebar_left_btn1.setBackgroundResource(R.drawable.top_menu_back);
+		btn_titlebar_left_btn1.setVisibility(View.GONE);
+		btn_titlebar_left_btn1.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				//go up one level
+				last_list_view_pos = 0;
+				loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);
 			}
 		});
 		btn_titlebar_right_btn1 = (ImageButton) findViewById(R.id.titlebar_right_btn1);
@@ -270,6 +306,25 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 				createTopRightMenu(v);
 			}
 		});
+		//progress bar and progress text
+		bar_progress = (ProgressBar) findViewById(R.id.video_browser_progress_bar);
+		text_progress = (TextView) findViewById(R.id.video_browser_progress_text);
+		if (generateStreamletInProgress || uploadInProgress) {
+			bar_progress.setVisibility(View.VISIBLE);
+			text_progress.setVisibility(View.VISIBLE);
+			bar_progress.setProgress((int)(mCurrProcessStreamletNum*100/mTotalNumStreamlets));
+			String lProgressMsg;
+			if (generateStreamletInProgress) {
+				lProgressMsg = "Generating streamlet in progress...";
+			} else {
+				lProgressMsg = "Uploading in progress...";
+			}
+			text_progress.setText(lProgressMsg);
+			refreshUI();
+		} else {
+			bar_progress.setVisibility(View.GONE);
+			text_progress.setVisibility(View.GONE);
+		}
 		loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);
 	}
 	
@@ -287,6 +342,62 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		lAndzopIntent.putExtra(pucVideoFileNameList, lFullPathList);
 		startActivity(lAndzopIntent);
 	}
+	
+	
+	/**
+	 * start generating streamlet
+	 */
+	private void startGeneratingStreamlet() {
+		//prepare for generating streamlet
+		bar_progress.setProgress(0);
+		bar_progress.setVisibility(View.VISIBLE);
+		text_progress.setVisibility(View.VISIBLE);
+		text_progress.setText("Generating streamlet in progress...");
+		generateStreamletInProgress = true;
+		//start streamlet service 
+		Intent l_intent = new Intent(getApplicationContext(), StreamletService.class);
+		startService(l_intent);
+	}
+	/**
+	 * update the progress text 
+	 */
+	public static void updateGeneratingStreamletProgress() {
+		if ((bar_progress!=null) && (text_progress!=null)) {
+			bar_progress.setProgress((int)(mCurrProcessStreamletNum*100/mTotalNumStreamlets));
+		}
+	}
+	/**
+	 * finish generating of streamlet
+	 */
+	public static void finishGeneratingStreamlet() {
+		if (bar_progress!=null) {
+			bar_progress.setVisibility(View.GONE);
+		}
+		if (text_progress!=null) {
+			text_progress.setVisibility(View.GONE);
+		}
+		generateStreamletInProgress = false;
+		if (bar_progress!=null) {
+			try {
+				//display a dialog to show the results
+				String lMsg = "Video Files Selected: " + mNumOfSelectedVideos + "\nNumber of Streamlets Generated: " + mCurrProcessStreamletNum;
+				OnClickListener yesButtonListener = new OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						VideoBrowser.self.loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);
+					}
+				};
+				AlertDialog.Builder builder = new AlertDialog.Builder(VideoBrowser.self);
+				builder.setMessage(lMsg)
+				.setCancelable(false)
+				.setPositiveButton("Ok", yesButtonListener);
+				AlertDialog alert = builder.create();
+				alert.show();	
+			}catch (Exception le) {
+				Log.e("VideoBrowser-finishedGeneratingStreamlet", le.getMessage());
+			}
+		}
+	}
+	
 	
 	private static final int REQUEST_CONVERT_OPTIONS = 0;
 	private static final int REQUESET_CAP_VIDEO = 1;
@@ -482,7 +593,12 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		String selectedFileOrDirName = this.displayEntries.get((int)id).getText();
 		File l_clickedFile = new File(this.displayEntries.get((int)id).getText());
 		if (l_clickedFile != null) {
-			showContextMenuForFile(l_clickedFile, position);
+			if (l_clickedFile.isDirectory()) {
+				last_list_view_pos = 0;
+				loadVideosFromDirectory(selectedFileOrDirName);
+			} else {
+				showContextMenuForFile(l_clickedFile, position);
+			}
 		}
 	}
 	
@@ -541,7 +657,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		    		OnClickListener yesButtonListener = new OnClickListener() {
 		    			public void onClick(DialogInterface arg0, int arg1) {	
 		    				_file.delete();
-		    				refreshUI();
+		    				loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);
 		    			}
 		    		};
 		    		OnClickListener noButtonListener = new OnClickListener() {

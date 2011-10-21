@@ -7,6 +7,27 @@
     <RelativeLayout 
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent">
+		<LinearLayout
+			android:id="@+id/video_browser_progress"
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true">
+		    <ProgressBar  
+		            style="?android:attr/progressBarStyleHorizontal" 
+		            android:layout_height="wrap_content" 
+		            android:layout_width="fill_parent" 
+		            android:id="@+id/video_browser_progress_bar" 
+		            >
+		   </ProgressBar>
+		   <TextView
+		   		android:id="@+id/video_browser_progress_text"
+		   		android:layout_width="fill_parent"
+		   		android:layout_height="wrap_content"
+		   		android:text="progress: "
+		   		>
+		   </TextView>
+	    </LinearLayout>
         <TableLayout android:id="@+id/video_browser_buttons" 
    			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"	
@@ -43,6 +64,7 @@
 	        android:drawSelectorOnTop="true"
 	        android:clickable="true"
 	        android:layout_centerInParent="true"
+	        android:layout_below="@id/video_browser_progress"
 	        android:layout_above="@id/video_browser_buttons"
 	        /> 
 	</RelativeLayout>
