@@ -2,7 +2,6 @@ package roman10.media.dash;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +28,10 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+
+
+//CONTINUE from here:
+//DefaultMP4Builder movieBoxChildren.add(createTrackBox(track, movie)); cause crash
 
 public class StreamletService extends Service {
 	private Context mContext;
@@ -85,7 +88,8 @@ public class StreamletService extends Service {
 		}
 		private long getVideoLengthInSeconds(String pFileName) {
 			try {
-				IsoFile lIsoFile = new IsoFile(new IsoBufferWrapperImpl(readFully(new FileInputStream(pFileName))));
+				//IsoFile lIsoFile = new IsoFile(new IsoBufferWrapperImpl(readFully(new FileInputStream(pFileName))));
+				IsoFile lIsoFile = new IsoFile(new IsoBufferWrapperImpl(new File(pFileName)));
 				lIsoFile.parse();
 				return lIsoFile.getMovieBox().getMovieHeaderBox().getDuration() /
 				lIsoFile.getMovieBox().getMovieHeaderBox().getTimescale();
@@ -138,20 +142,23 @@ public class StreamletService extends Service {
 						Movie movie = new MovieCreator().build(new IsoBufferWrapperImpl(new File(VideoBrowser.displayEntries.get(fi).getText())));
 
 						List<Track> tracks = movie.getTracks();
+						Log.i("Streamlet-Service", "number of tracks: " + tracks.size());
 						movie.setTracks(new LinkedList<Track>());//remove all tracks we will create new tracks from the old
 
-						//the algo works as below,
-						//0. set startSyncSample as 0
-						//1. get the end sync frame (endSyncSample) which will be more 10 seconds away
-						//2. cropped the video from [startSyncSample,endSyncSample)
-						//3. set startSyncSample as endSyncSample and start from 1 again.
+						//TODO: this part needs refinement. If the video contains multiple tracks, the logic
+						//below cannot handle it, it will break the tracks.
+						//TODO: need to pay attention to memory usage, if the video is big, this method might
+						//not be able to handle
+						
 						for (Track track : tracks) {
 							track.getDecodingTimeEntries();
 							//get the start sync sample and end sync sample
 							long currentSample = 0;
 							double startTime = 0;
 							double currentTime = 0;
-							long startSyncSample = 0;
+							long startSyncSample = 1;
+							//for debug only
+							long[] syncSamples = track.getSyncSamples();
 							for (int i = 0; i < track.getDecodingTimeEntries().size(); ++i) {
 					    		TimeToSampleBox.Entry lEntry = track.getDecodingTimeEntries().get(i);
 					    		for (int j = 0; j < lEntry.getCount(); ++j) {
@@ -161,7 +168,9 @@ public class StreamletService extends Service {
 					    			if (currentTime - startTime > STREAMLET_INTERVAL) {
 					    				//check if the next sample is a sync sample, if so, we crop the track
 					    				if (Arrays.binarySearch(track.getSyncSamples(), currentSample + 1) >= 0) {
-					    					movie.addTrack(new CroppedTrack(track, startSyncSample, currentSample));
+					    					Log.i("StreamletService", "video from " + startSyncSample + " to " + (currentSample + 1));
+					    					//start and end are exclusive
+					    					movie.addTrack(new CroppedTrack(track, startSyncSample, currentSample + 1));
 					    					IsoFile out = new DefaultMp4Builder().build(movie);
 											FileOutputStream fos = new FileOutputStream(new File(String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime)));
 											Log.i("StreamletService", String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime));
@@ -177,16 +186,22 @@ public class StreamletService extends Service {
 					    		}
 					    	}
 							//check if we still have some sample left
-							if (currentTime - startTime > 0.00001f || currentSample > startSyncSample) {
-								//generate the last streamlet
-								movie.addTrack(new CroppedTrack(track, startSyncSample, currentSample));
-		    					IsoFile out = new DefaultMp4Builder().build(movie);
-								FileOutputStream fos = new FileOutputStream(new File(String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime)));
-								Log.i("StreamletService", String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime));
-								out.getBox(new IsoOutputStream(fos));
-								fos.close();
-								++VideoBrowser.mCurrProcessStreamletNum;
-								this.publishProgress();
+							//note that there's a case when the left sample is 1 only, the current mp4parser cannot handle it
+							if (currentTime - startTime > 0.00001f || currentSample >= startSyncSample) {
+								try {
+									//generate the last streamlet
+									movie.addTrack(new CroppedTrack(track, startSyncSample, currentSample + 1));
+									Log.i("StreamletService", "video from " + startSyncSample + " to " + (currentSample + 1));
+			    					IsoFile out = new DefaultMp4Builder().build(movie);
+									FileOutputStream fos = new FileOutputStream(new File(String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime)));
+									Log.i("StreamletService", String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "output-%.2f-%.2f.mp4", startTime, currentTime));
+									out.getBox(new IsoOutputStream(fos));
+									fos.close();
+									++VideoBrowser.mCurrProcessStreamletNum;
+									this.publishProgress();
+								} catch (Exception e) {
+									Log.e("StreamletServer", e.getMessage());
+								}
 							}
 						}
 					}
