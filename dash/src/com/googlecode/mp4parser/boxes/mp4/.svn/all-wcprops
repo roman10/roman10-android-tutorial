@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/242/trunk/isoparser/src/main/java/com/googlecode/mp4parser/boxes/mp4
+END
+ESDescriptorBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/242/trunk/isoparser/src/main/java/com/googlecode/mp4parser/boxes/mp4/ESDescriptorBox.java
+END
+AbstractDescriptorBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/242/trunk/isoparser/src/main/java/com/googlecode/mp4parser/boxes/mp4/AbstractDescriptorBox.java
+END
+ObjectDescriptorBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/242/trunk/isoparser/src/main/java/com/googlecode/mp4parser/boxes/mp4/ObjectDescriptorBox.java
+END
