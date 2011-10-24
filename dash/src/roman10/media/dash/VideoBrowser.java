@@ -130,6 +130,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	
 	private static int number_of_icons = 0;
 	LoadImageVideoTask loadTask;
+	private String mCurrentDir = FileUtilsStatic.DEFAULT_DIR;
 	private void loadVideosFromDirectory(String _dir) {
 		try {
 			if (loadTask != null && loadTask.getStatus() != Status.FINISHED) {
@@ -209,6 +210,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		}
 		@Override
 		protected Void doInBackground(String... params) {
+			mCurrentDir = params[0];
 			File l_root = new File(params[0]);
 			if (l_root.isDirectory()) {
 				number_of_icons = 0;
@@ -657,7 +659,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		    		OnClickListener yesButtonListener = new OnClickListener() {
 		    			public void onClick(DialogInterface arg0, int arg1) {	
 		    				_file.delete();
-		    				loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);
+		    				loadVideosFromDirectory(mCurrentDir);
 		    			}
 		    		};
 		    		OnClickListener noButtonListener = new OnClickListener() {

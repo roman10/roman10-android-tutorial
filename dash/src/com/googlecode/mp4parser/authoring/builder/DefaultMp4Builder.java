@@ -393,8 +393,6 @@ public class DefaultMp4Builder implements Mp4Builder {
         long[] referenceChunkStarts = null;
         long referenceSampleCount = 0;
         for (Track test : movie.getTracks()) {
-        	long[] tt = test.getSyncSamples();
-        	int ii = test.getSyncSamples().length;
             if (test.getSyncSamples() != null && test.getSyncSamples().length > 0) {
                 referenceTrack = test;
                 referenceChunkStarts = test.getSyncSamples();
