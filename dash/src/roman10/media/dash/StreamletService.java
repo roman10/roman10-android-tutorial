@@ -183,6 +183,7 @@ public class StreamletService extends Service {
 
 						//TODO: need to pay attention to memory usage, if the video is big, this method might
 						//not be able to handle
+						long startSyncSample = 1;
 						long currentSample = 0;
 						double startTime = 0;
 						double currentTime = 0;
@@ -200,14 +201,15 @@ public class StreamletService extends Service {
 						    			if (currentTime - startTime > STREAMLET_INTERVAL) {
 						    				//check if the next sample is a sync sample, if so, we crop the track
 						    				if (Arrays.binarySearch(track.getSyncSamples(), currentSample + 1) >= 0) {
-						    					streamletsRec.add(new StreamletRecord(startTime, currentTime));
+						    					streamletsRec.add(new StreamletRecord(startTime, currentTime, startSyncSample, currentSample));
 						    					startTime = currentTime;
+						    					startSyncSample = currentSample + 1;
 						    				}
 						    			}
 						    		}
 								}
 								if (currentTime > startTime) {
-									streamletsRec.add(new StreamletRecord(startTime, currentTime));
+									streamletsRec.add(new StreamletRecord(startTime, currentTime, startSyncSample, currentSample));
 								}
 							}
 						}
@@ -224,6 +226,10 @@ public class StreamletService extends Service {
 									Log.e("Streamlet-service", "sync sample: " + tt[x]);
 								}
 							}
+							Log.e("Streamlet-service", "sample size: " + track.getSamples().size());
+						}
+						for (int xx = 0; xx < streamletsRec.size(); ++xx) {
+							Log.e("Streamlet-service", "streamlet rec: " + streamletsRec.get(xx).startSample + ":" + streamletsRec.get(xx).endSample + "time:" + streamletsRec.get(xx).startTime + ":" + streamletsRec.get(xx).endTime);
 						}
 						double[] currentTimeForAllTracks = new double[tracks.size()];
 						int[] js = new int[tracks.size()];
@@ -231,29 +237,36 @@ public class StreamletService extends Service {
 						for (int i = 0; i < streamletsRec.size(); ++i) {
 							for (int cnt = 0; cnt < tracks.size(); ++cnt) {
 								Track track = tracks.get(cnt);
-								long startSample = currentSampleForAllTracks[cnt], endSample = currentSampleForAllTracks[cnt];
-								boolean foundEnd = false;
-								for (; js[cnt] < track.getDecodingTimeEntries().size(); ++js[cnt]) {
-									TimeToSampleBox.Entry lEntry = track.getDecodingTimeEntries().get(js[cnt]);
-									for (; ks[cnt] < lEntry.getCount(); ++ks[cnt]) {
-										 currentTimeForAllTracks[cnt] += (double) lEntry.getDelta() / (double) track.getTrackMetaData().getTimescale();
-										 currentSampleForAllTracks[cnt]++;
-										 if (currentTimeForAllTracks[cnt] >= streamletsRec.get(i).endTime) {
-											 endSample = currentSampleForAllTracks[cnt];
-											 foundEnd = true;
-											 break;
-										 }
+								if (track.getSyncSamples()!=null && track.getSyncSamples().length > 0) {
+									//if it's sync track, we just read the startSample and endSample
+									Log.e("StreamletService", "track " + cnt + ": " + streamletsRec.get(i).startSample + "-" + (streamletsRec.get(i).endSample + 1));
+									movie.addTrack(new CroppedTrack(track, streamletsRec.get(i).startSample, streamletsRec.get(i).endSample + 1));
+								} else {
+									//if it's not sync track, we use time to get the start and end samples
+									long startSample = currentSampleForAllTracks[cnt], endSample = currentSampleForAllTracks[cnt];
+									boolean foundEnd = false;
+									for (; js[cnt] < track.getDecodingTimeEntries().size(); ++js[cnt]) {
+										TimeToSampleBox.Entry lEntry = track.getDecodingTimeEntries().get(js[cnt]);
+										for (; ks[cnt] < lEntry.getCount(); ++ks[cnt]) {
+											 currentTimeForAllTracks[cnt] += (double) lEntry.getDelta() / (double) track.getTrackMetaData().getTimescale();
+											 currentSampleForAllTracks[cnt]++;
+											 if (currentTimeForAllTracks[cnt] >= streamletsRec.get(i).endTime || currentSampleForAllTracks[cnt] >=track.getSamples().size()) {
+												 endSample = currentSampleForAllTracks[cnt];
+												 foundEnd = true;
+												 break;
+											 }
+										}
+										if (ks[cnt] == lEntry.getCount()) {ks[cnt] = 0;}
+										if (foundEnd) break;
 									}
-									if (ks[cnt] == lEntry.getCount()) {ks[cnt] = 0;}
-									if (foundEnd) break;
+									//as CroppedTrack is [Start, end), we use endSample + 1
+									Log.e("StreamletService", "track " + cnt + ": " + startSample + "-" + (endSample + 1));
+									movie.addTrack(new CroppedTrack(track, startSample, endSample + 1));
 								}
-								//as CroppedTrack is [Start, end)
-								Log.e("StreamletService", "track " + cnt + ": " + startSample + "-" + (endSample));
-								movie.addTrack(new CroppedTrack(track, startSample, endSample));
 							}
 							//dump all segmented tracks to file
 	    					IsoFile out = new DefaultMp4Builder().build(movie);
-							FileOutputStream fos = new FileOutputStream(new File(String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "%s-%.2f-%.2f.mp4", lFileNameWithoutExt, startTime, currentTime)));
+							FileOutputStream fos = new FileOutputStream(new File(String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "%s-%.2f-%.2f.mp4", lFileNameWithoutExt, streamletsRec.get(i).startTime, streamletsRec.get(i).endTime)));
 							Log.i("StreamletService", String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "%s-%.2f-%.2f.mp4", lFileNameWithoutExt, streamletsRec.get(i).startTime, streamletsRec.get(i).endTime));
 							out.getBox(new IsoOutputStream(fos));
 							fos.close();
