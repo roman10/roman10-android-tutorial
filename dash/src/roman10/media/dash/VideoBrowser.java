@@ -8,6 +8,7 @@ import roman10.quickactionwindow.ActionItem3;
 import roman10.quickactionwindow.QuickAction3;
 import roman10.ui.iconifiedtextselectedlist.IconifiedTextSelected;
 import roman10.ui.iconifiedtextselectedlist.IconifiedTextSelectedView;
+import roman10.utils.EnvUtils;
 import roman10.utils.FileUtilsStatic;
 
 import android.app.AlertDialog;
@@ -83,6 +84,8 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	//displayEntries and mSelected stores the current display data
 	public static List<IconifiedTextSelected> displayEntries = new ArrayList<IconifiedTextSelected>();
 	public static List<Boolean> mSelected = new ArrayList<Boolean>();
+	public static List<String> mUploadFileNameList = new ArrayList<String>();
+	public static List<String> mStreamletFileNameList = new ArrayList<String>();
 	
 	public static void setEntrySelected(int pos) {
 		mSelected.set(pos, true);
@@ -116,12 +119,38 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		}
 		return true;
 	}
-
+	
 	private int getNumOfEntriesSelected() {
 		int l_count = mSelected.size();
 		int l_selected = 0;
 		for (int i = 0; i < l_count; ++i) {
 			if (mSelected.get(i)) {
+				++l_selected;
+			}
+		}
+		return l_selected;
+	}
+
+	private int getVideoFileNamesForStreamlet() {
+		mStreamletFileNameList.clear();
+		int l_count = mSelected.size();
+		int l_selected = 0;
+		for (int i = 0; i < l_count; ++i) {
+			if (mSelected.get(i)) {
+				mStreamletFileNameList.add(displayEntries.get(i).getText());
+				++l_selected;
+			}
+		}
+		return l_selected;
+	}
+	
+	private int getVideoFileNamesForUpload() {
+		mUploadFileNameList.clear();
+		int l_count = mSelected.size();
+		int l_selected = 0;
+		for (int i = 0; i < l_count; ++i) {
+			if (mSelected.get(i)) {
+				mUploadFileNameList.add(displayEntries.get(i).getText());
 				++l_selected;
 			}
 		}
@@ -244,7 +273,8 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	public static ProgressBar bar_progress;
 	public static TextView text_progress;
 	private static boolean generateStreamletInProgress = false, uploadInProgress = false;
-	private static int mNumOfSelectedVideos = 0;
+	private static int mNumOfSelectedVideosForStreamlet = 0;
+	private static int mNumOfSelectedVideosForUpload = 0;
 	public static long mTotalNumStreamlets;
     public static long mCurrProcessStreamletNum;
 	private void initUI() {
@@ -268,8 +298,8 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 			public void onClick(View v) {
 				/*generate streamlet*/
 				//count the number of entries selected
-				mNumOfSelectedVideos = getNumOfEntriesSelected();
-				if(mNumOfSelectedVideos == 0) {
+				mNumOfSelectedVideosForStreamlet = getVideoFileNamesForStreamlet();
+				if(mNumOfSelectedVideosForStreamlet == 0) {
 					Toast.makeText(mContext, "No Video is Selected!", Toast.LENGTH_SHORT).show();
 					return;
 				} else {
@@ -283,12 +313,18 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 			public void onClick(View v) {
 				/*upload video*/
 				//count the number of entries selected
-				mNumOfSelectedVideos = getNumOfEntriesSelected();
-				if(mNumOfSelectedVideos == 0) {
+				mNumOfSelectedVideosForUpload = getVideoFileNamesForUpload();
+				if(mNumOfSelectedVideosForUpload == 0) {
 					Toast.makeText(mContext, "No Video is Selected to upload!", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				//if there're videos selected, start
+				//0. check if the device has network connection
+				if (!EnvUtils.isOnline(getApplicationContext())) {
+					Toast.makeText(mContext, "No network access!", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				//1. 
 			}
 		});
 		btn_titlebar_left_btn1 = (ImageButton) findViewById(R.id.titlebar_left_btn1);
@@ -382,7 +418,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		if (bar_progress!=null) {
 			try {
 				//display a dialog to show the results
-				String lMsg = "Video Files Selected: " + mNumOfSelectedVideos + "\nNumber of Streamlets Generated: " + mCurrProcessStreamletNum;
+				String lMsg = "Video Files Selected: " + mNumOfSelectedVideosForStreamlet + "\nNumber of Streamlets Generated: " + mCurrProcessStreamletNum;
 				OnClickListener yesButtonListener = new OnClickListener() {
 					public void onClick(DialogInterface arg0, int arg1) {
 						VideoBrowser.self.loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);

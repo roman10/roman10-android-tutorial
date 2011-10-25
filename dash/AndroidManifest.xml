@@ -22,13 +22,23 @@
     			  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>
 		<service android:enabled="true" 
-        	android:name="StreamletService"
+        	android:name="roman10.media.dash.StreamletService"
+        	>
+		</service>
+		<service android:enabled="true" 
+        	android:name="roman10.http.UploadService"
         	>
 		</service>
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
     <uses-permission android:name="android.permission.CAMERA"/>
 	<uses-permission android:name="android.permission.RECORD_AUDIO"/>
 	<uses-permission android:name="android.permission.RECORD_VIDEO"/>
+	
+	<uses-feature android:name="android.hardware.camera"/>
+	<uses-feature android:name="android.hardware.camera.autofocus"/>
 </manifest>
