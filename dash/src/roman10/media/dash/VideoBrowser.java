@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import roman10.http.UploadService;
 import roman10.quickactionwindow.ActionItem3;
 import roman10.quickactionwindow.QuickAction3;
 import roman10.ui.iconifiedtextselectedlist.IconifiedTextSelected;
@@ -274,9 +275,9 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	public static TextView text_progress;
 	private static boolean generateStreamletInProgress = false, uploadInProgress = false;
 	private static int mNumOfSelectedVideosForStreamlet = 0;
-	private static int mNumOfSelectedVideosForUpload = 0;
+	public static int mNumOfSelectedVideosForUpload = 0;
 	public static long mTotalNumStreamlets;
-    public static long mCurrProcessStreamletNum;
+    public static long mCurrProcessStreamletNum, mCurrUploadFileNum;
 	private void initUI() {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		this.setContentView(R.layout.video_browser);
@@ -324,7 +325,8 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 					Toast.makeText(mContext, "No network access!", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				//1. 
+				//1.upload the video 
+				startUploadFiles();
 			}
 		});
 		btn_titlebar_left_btn1 = (ImageButton) findViewById(R.id.titlebar_left_btn1);
@@ -381,6 +383,60 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		startActivity(lAndzopIntent);
 	}
 	
+	
+	/**
+	 * start uploading
+	 */
+	private void startUploadFiles() {
+		//prepare for generating streamlet
+		bar_progress.setProgress(0);
+		bar_progress.setVisibility(View.VISIBLE);
+		text_progress.setVisibility(View.VISIBLE);
+		text_progress.setText("Uploading files in progress...");
+		uploadInProgress = true;
+		//start streamlet service 
+		Intent l_intent = new Intent(getApplicationContext(), UploadService.class);
+		startService(l_intent);
+	}
+	/**
+	 * update the progress text 
+	 */
+	public static void updateUploadFilesProgress() {
+		if ((bar_progress!=null) && (text_progress!=null)) {
+			bar_progress.setProgress((int)(mCurrUploadFileNum*100/mNumOfSelectedVideosForUpload));
+		}
+	}
+	/**
+	 * finish uploading of files
+	 */
+	public static void finishUploadFiles() {
+		if (bar_progress!=null) {
+			bar_progress.setVisibility(View.GONE);
+		}
+		if (text_progress!=null) {
+			text_progress.setVisibility(View.GONE);
+		}
+		uploadInProgress = false;
+		if (bar_progress!=null) {
+			try {
+				//display a dialog to show the results
+				String lMsg = "Video Files Selected: " + mNumOfSelectedVideosForUpload + "\nNumber of Files Uploaded: " + mCurrUploadFileNum;
+				OnClickListener yesButtonListener = new OnClickListener() {
+					public void onClick(DialogInterface arg0, int arg1) {
+						VideoBrowser.self.loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);
+					}
+				};
+				AlertDialog.Builder builder = new AlertDialog.Builder(VideoBrowser.self);
+				builder.setMessage(lMsg)
+				.setCancelable(false)
+				.setPositiveButton("Ok", yesButtonListener);
+				AlertDialog alert = builder.create();
+				alert.show();	
+			}catch (Exception le) {
+				Log.e("VideoBrowser-finishedGeneratingStreamlet", le.getMessage());
+			}
+		}
+	}
 	
 	/**
 	 * start generating streamlet
