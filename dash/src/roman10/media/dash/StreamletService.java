@@ -52,7 +52,7 @@ public class StreamletService extends Service {
 	public void onStart(Intent intent, int startid) {
 		Log.i("onStart", "start generating streamlet");
 		generateStreamletTask genStreamletTask = new generateStreamletTask();
-		genStreamletTask.execute(null);
+		genStreamletTask.execute();
 	}
 	
 	@Override

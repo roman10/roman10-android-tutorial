@@ -39,7 +39,7 @@ public class UploadService extends Service {
 	public void onStart(Intent intent, int startid) {
 		Log.i("onStart", "start upload files");
 		UploadFileTask uploadFileTask = new UploadFileTask();
-		uploadFileTask.execute(null);
+		uploadFileTask.execute();
 	}
 	@Override
 	public IBinder onBind(Intent intent) {
