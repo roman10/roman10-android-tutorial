@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/207/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/sampleentry
+END
+SampleEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/132/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/sampleentry/SampleEntry.java
+END
+AudioSampleEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/sampleentry/AudioSampleEntry.java
+END
+VisualSampleEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/sampleentry/VisualSampleEntry.java
+END
+TextSampleEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/207/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/sampleentry/TextSampleEntry.java
+END
+MpegSampleEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/sampleentry/MpegSampleEntry.java
+END
+AmrSpecificBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/sampleentry/AmrSpecificBox.java
+END

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- styles for titlebar -->
+		<style name="titlebar_short">
+			<item name="android:layout_width">fill_parent</item>
+			<item name="android:layout_height">@dimen/titlebar_height_short</item>
+			<item name="android:orientation">horizontal</item>
+			<item name="android:gravity">center_vertical|center_horizontal</item>
+			<!-- <item name="android:background">@drawable/btn_strip_trans_middle_normal</item> -->
+			<item name="android:background">@drawable/topmenu_bg</item>
+		</style>
+		<style name="titlebar_text_short">
+			<item name="android:id">@+id/titlebar_text</item>
+			<item name="android:layout_width">wrap_content</item>
+			<item name="android:layout_height">wrap_content</item>
+			<item name="android:layout_weight">1</item>
+			<item name="android:textSize">@dimen/titlebar_textsize_short</item>
+			<item name="android:textStyle">bold</item>
+			<item name="android:gravity">center_vertical|center_horizontal</item>
+			<item name="android:layout_gravity">center_vertical|center_horizontal</item>
+			<!-- <item name="android:paddingLeft">15dip</item> -->
+			<item name="android:singleLine">true</item>
+		</style>
+		<style name="titlebar_btn_short">
+			<item name="android:layout_width">@dimen/titlebar_height_short_sub</item>
+	        <item name="android:layout_height">fill_parent</item>
+	        <!-- <item name="android:background">@drawable/icon</item> -->
+		</style>
+		<style name="titlebar_text">
+			<item name="android:id">@+id/titlebar_text</item>
+			<item name="android:layout_width">wrap_content</item>
+			<item name="android:layout_height">wrap_content</item>
+			<item name="android:textSize">@dimen/titlebar_textsize</item>
+			<item name="android:textStyle">bold</item>
+			<item name="android:gravity">center_vertical|center_horizontal</item>
+			<item name="android:layout_gravity">center_vertical|center_horizontal</item>
+			<item name="android:paddingLeft">15dip</item>
+			<item name="android:singleLine">true</item>
+		</style>
+		<style name="titlebar_btn">
+			<item name="android:layout_width">@dimen/titlebar_height_sub</item>
+	        <item name="android:layout_height">fill_parent</item>
+	        <item name="android:background">@drawable/icon</item>
+		</style>
+		<style name="titlebar_separator">
+	        <item name="android:layout_width">1px</item>
+	        <item name="android:layout_height">fill_parent</item>
+	        <item name="android:background">@color/title_separator</item>
+	    </style>
+	    <style name="titlebar_spring">
+	        <item name="android:layout_width">0dp</item>
+	        <item name="android:layout_height">fill_parent</item>
+	        <item name="android:layout_weight">1</item>
+    	</style>
+    <!-- styles for short foot bar -->
+    	<style name="footbar_short">
+			<item name="android:layout_width">fill_parent</item>
+			<item name="android:layout_height">40dip</item>
+			<item name="android:orientation">horizontal</item>
+			<item name="android:gravity">center_vertical|center_horizontal</item>
+			<!-- <item name="android:background">@drawable/btn_strip_trans_middle_normal</item> -->
+			<!-- <item name="android:background">@drawable/topmenu_bg</item> -->
+			<item name="android:layout_gravity">bottom</item>
+			<item name="android:layout_alignParentBottom">true</item>
+			<item name="android:layout_margin">0dip</item>
+		</style>
+		<style name="footbar_btn_short">
+			<item name="android:layout_width">100dip</item>
+	        <item name="android:layout_height">fill_parent</item>
+	        <!-- <item name="android:background">@drawable/btn_bg</item> -->
+			<!-- <item name="android:textColor">@color/solid_white</item> -->
+		</style>
+		<style name="footbar_btn_short2">
+			<item name="android:layout_width">100dip</item>
+	        <item name="android:layout_height">fill_parent</item>
+	        <!-- <item name="android:background">@drawable/btn_bg2</item> -->
+			<!-- <item name="android:textColor">@color/solid_white</item> -->
+			<item name="android:padding">0dip</item>
+		</style>
+	<!-- styles for quick action menu -->
+    	<style name="Animations" />
+    		<style name="Animations.PopDownMenu" />
+		    	<style name="Animations.PopDownMenu.Left">
+					<item name="@android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
+					<item name="@android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
+				</style>
+				<style name="Animations.PopDownMenu.Right">
+					<item name="@android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
+					<item name="@android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
+				</style>
+				
+				<style name="Animations.PopDownMenu.Center">
+					<item name="@android:windowEnterAnimation">@anim/grow_from_top</item>
+					<item name="@android:windowExitAnimation">@anim/shrink_from_bottom</item>
+				</style>
+				
+				<style name="Animations.PopDownMenu.Reflect">
+					<item name="@android:windowEnterAnimation">@anim/pump_top</item>
+					<item name="@android:windowExitAnimation">@anim/disappear</item>
+				</style>
+			<!-- PopUpMenu -->
+			<style name="Animations.PopUpMenu" />
+				<style name="Animations.PopUpMenu.Left">
+					<item name="@android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
+					<item name="@android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
+				</style>
+				
+				<style name="Animations.PopUpMenu.Right">
+					<item name="@android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
+					<item name="@android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
+				</style>
+				
+				<style name="Animations.PopUpMenu.Center">
+					<item name="@android:windowEnterAnimation">@anim/grow_from_bottom</item>
+					<item name="@android:windowExitAnimation">@anim/shrink_from_top</item>
+				</style>
+				
+				<style name="Animations.PopUpMenu.Reflect">
+					<item name="@android:windowEnterAnimation">@anim/pump_bottom</item>
+					<item name="@android:windowExitAnimation">@anim/disappear</item>
+				</style>
+		<!-- others -->		
+		<style name="filler_15dip">
+    		<item name="android:layout_width">fill_parent</item>
+    		<item name="android:layout_height">15dip</item>
+    		<item name="android:visibility">invisible</item>
+    	</style>
+</resources>

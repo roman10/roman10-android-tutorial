@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp
+END
+LargestRelativeTransmissionTimeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/LargestRelativeTransmissionTimeBox.java
+END
+RtpTrackSdpHintInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/RtpTrackSdpHintInformationBox.java
+END
+PayloadTypeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/PayloadTypeBox.java
+END
+RtpMovieHintInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/RtpMovieHintInformationBox.java
+END
+RtpHintSampleEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/RtpHintSampleEntry.java
+END
+HintTrackReferenceBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/147/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/HintTrackReferenceBox.java
+END
+HintPacketsSentBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/HintPacketsSentBox.java
+END
+HintInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/HintInformationBox.java
+END
+SmallestRelativeTransmissionTimeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/SmallestRelativeTransmissionTimeBox.java
+END
+LargestHintPacketBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/LargestHintPacketBox.java
+END
+HintStatisticsBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/HintStatisticsBox.java
+END
+TimeScaleEntry.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/TimeScaleEntry.java
+END
+HintStatisticBoxes.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/HintStatisticBoxes.java
+END
+LargestHintPacketDurationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/LargestHintPacketDurationBox.java
+END
+MaximumDataRateBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/rtp/MaximumDataRateBox.java
+END

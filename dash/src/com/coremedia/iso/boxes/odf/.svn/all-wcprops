@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf
+END
+OmaDrmContentIdBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmContentIdBox.java
+END
+OmaDrmRightsObjectBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmRightsObjectBox.java
+END
+OmaDrmTransactionTrackingBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmTransactionTrackingBox.java
+END
+OmaDrmIconUriBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmIconUriBox.java
+END
+OmaDrmGroupIdBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmGroupIdBox.java
+END
+OmaDrmKeyManagenentSystemBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmKeyManagenentSystemBox.java
+END
+OmaDrmCoverUriBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmCoverUriBox.java
+END
+OmaDrmInfoUrlBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmInfoUrlBox.java
+END
+OmaDrmDiscreteHeadersBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmDiscreteHeadersBox.java
+END
+OmaDrmContentObjectBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmContentObjectBox.java
+END
+MutableDrmInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/MutableDrmInformationBox.java
+END
+OmaDrmContainerBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmContainerBox.java
+END
+OmaDrmCommonHeadersBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmCommonHeadersBox.java
+END
+OmaDrmLyricsUriBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/odf/OmaDrmLyricsUriBox.java
+END

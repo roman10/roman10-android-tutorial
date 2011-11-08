@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent">
+    <include layout="@layout/element_titlebar_v3"></include>
+    <RelativeLayout 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent">
+		<LinearLayout
+			android:id="@+id/video_browser_progress"
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true">
+		    <ProgressBar  
+		            style="?android:attr/progressBarStyleHorizontal" 
+		            android:layout_height="wrap_content" 
+		            android:layout_width="fill_parent" 
+		            android:id="@+id/video_browser_progress_bar" 
+		            >
+		   </ProgressBar>
+		   <TextView
+		   		android:id="@+id/video_browser_progress_text"
+		   		android:layout_width="fill_parent"
+		   		android:layout_height="wrap_content"
+		   		android:text="progress: "
+		   		>
+		   </TextView>
+	    </LinearLayout>
+        <TableLayout android:id="@+id/video_browser_buttons" 
+   			android:layout_width="fill_parent" 
+			android:layout_height="wrap_content"	
+			style="@style/footbar_short">
+			<TableRow
+				android:gravity="center">
+				<Button android:id="@+id/video_browser_btn1" 
+				  	android:text="Capture"
+				  	style="@style/footbar_btn_short2"
+				  	android:layout_width="fill_parent"
+					/>	
+				<Button android:id="@+id/video_browser_btn2" 
+				  	android:text="Segment"
+				  	style="@style/footbar_btn_short2"
+				  	android:layout_width="fill_parent"
+					/>	
+				<Button android:id="@+id/video_browser_btn3" 
+				  	android:text="Upload"
+				  	style="@style/footbar_btn_short2"
+				  	android:layout_width="fill_parent"
+					/>
+				<Button android:id="@+id/video_browser_btn4" 
+				  	android:text="Convert"
+				  	style="@style/footbar_btn_short2"
+				  	android:layout_width="fill_parent"
+				  	android:visibility="gone"
+					/>
+		  	</TableRow>
+		</TableLayout>
+   
+	    <ListView android:id="@android:id/list"
+	        android:layout_width="fill_parent" 
+	        android:layout_height="fill_parent"
+	        android:drawSelectorOnTop="true"
+	        android:clickable="true"
+	        android:layout_centerInParent="true"
+	        android:layout_below="@id/video_browser_progress"
+	        android:layout_above="@id/video_browser_buttons"
+	        /> 
+	</RelativeLayout>
+	
+</LinearLayout>

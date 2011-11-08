@@ -1,0 +1,473 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/245/trunk/isoparser/src/main/java/com/coremedia/iso/boxes
+END
+DataReferenceBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/DataReferenceBox.java
+END
+ChunkOffset64BitBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/230/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/ChunkOffset64BitBox.java
+END
+BitRateBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/BitRateBox.java
+END
+TrackMetaData.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/130/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/TrackMetaData.java
+END
+UnknownBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/2/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/UnknownBox.java
+END
+XmlBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/238/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/XmlBox.java
+END
+CompositionShiftLeastGreatestAtom.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/CompositionShiftLeastGreatestAtom.java
+END
+AbstractBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/242/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/AbstractBox.java
+END
+TrackBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/TrackBox.java
+END
+ItemProtectionBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/ItemProtectionBox.java
+END
+SampleAuxiliaryInformationOffsetsBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/238/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SampleAuxiliaryInformationOffsetsBox.java
+END
+SchemeInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SchemeInformationBox.java
+END
+OmaDrmAccessUnitFormatBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/OmaDrmAccessUnitFormatBox.java
+END
+HintMediaHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/HintMediaHeaderBox.java
+END
+SampleSizeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/200/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SampleSizeBox.java
+END
+TrackHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/TrackHeaderBox.java
+END
+CompositionTimeToSample.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/218/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/CompositionTimeToSample.java
+END
+UserBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/UserBox.java
+END
+MediaBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/MediaBox.java
+END
+DataInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/DataInformationBox.java
+END
+FileTypeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/237/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/FileTypeBox.java
+END
+FreeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/47/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/FreeBox.java
+END
+TitleBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/TitleBox.java
+END
+NullMediaHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/NullMediaHeaderBox.java
+END
+SampleDescriptionBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SampleDescriptionBox.java
+END
+AbstractFullBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/242/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/AbstractFullBox.java
+END
+StaticChunkOffsetBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/230/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/StaticChunkOffsetBox.java
+END
+WriteListener.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/98/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/WriteListener.java
+END
+LiteralBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/234/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/LiteralBox.java
+END
+RecordingYearBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/RecordingYearBox.java
+END
+PerformerBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/PerformerBox.java
+END
+AuthorBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/AuthorBox.java
+END
+ObjectDescriptorBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/84/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/ObjectDescriptorBox.java
+END
+SchemeTypeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SchemeTypeBox.java
+END
+KeywordsBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/KeywordsBox.java
+END
+AbstractMediaHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/188/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/AbstractMediaHeaderBox.java
+END
+SampleToChunkBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SampleToChunkBox.java
+END
+HandlerBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/HandlerBox.java
+END
+OriginalFormatBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/234/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/OriginalFormatBox.java
+END
+Box.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/188/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/Box.java
+END
+DescriptionBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/DescriptionBox.java
+END
+EditBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/EditBox.java
+END
+ItemLocationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/238/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/ItemLocationBox.java
+END
+MovieHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/MovieHeaderBox.java
+END
+ClassificationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/ClassificationBox.java
+END
+GenreBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/GenreBox.java
+END
+AlbumBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/AlbumBox.java
+END
+SubSampleInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SubSampleInformationBox.java
+END
+FullBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/64/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/FullBox.java
+END
+TimeToSampleBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/219/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/TimeToSampleBox.java
+END
+AbstractContainerBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/230/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/AbstractContainerBox.java
+END
+UserDataBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/UserDataBox.java
+END
+CopyrightBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/CopyrightBox.java
+END
+SyncSampleBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SyncSampleBox.java
+END
+ChunkOffsetBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/230/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/ChunkOffsetBox.java
+END
+RatingBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/RatingBox.java
+END
+TrackReferenceTypeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/TrackReferenceTypeBox.java
+END
+MetaBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/200/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/MetaBox.java
+END
+MediaHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/MediaHeaderBox.java
+END
+SampleTableBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SampleTableBox.java
+END
+FreeSpaceBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/FreeSpaceBox.java
+END
+SampleAuxiliaryInformationSizesBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/238/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SampleAuxiliaryInformationSizesBox.java
+END
+TrackMetaDataContainer.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/2/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/TrackMetaDataContainer.java
+END
+SampleToGroupBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SampleToGroupBox.java
+END
+SoundMediaHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SoundMediaHeaderBox.java
+END
+FullContainerBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/FullContainerBox.java
+END
+ProgressiveDownloadInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/ProgressiveDownloadInformationBox.java
+END
+TrackBoxContainer.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/178/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/TrackBoxContainer.java
+END
+DataEntryUrlBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/DataEntryUrlBox.java
+END
+VideoMediaHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/VideoMediaHeaderBox.java
+END
+MovieBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/MovieBox.java
+END
+DataEntryUrnBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/DataEntryUrnBox.java
+END
+ProtectionSchemeInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/ProtectionSchemeInformationBox.java
+END
+EditListBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/234/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/EditListBox.java
+END
+SampleDependencyTypeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/SampleDependencyTypeBox.java
+END
+ContainerBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/132/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/ContainerBox.java
+END
+TrackReferenceBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/TrackReferenceBox.java
+END
+MediaInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/MediaInformationBox.java
+END

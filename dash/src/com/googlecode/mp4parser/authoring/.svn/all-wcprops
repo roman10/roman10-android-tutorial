@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/242/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring
+END
+Test.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/212/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/Test.java
+END
+Movie.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/215/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/Movie.java
+END
+MovieMetaData.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/211/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/MovieMetaData.java
+END
+Track.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/207/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/Track.java
+END
+TrackMetaData.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/234/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/TrackMetaData.java
+END
+Mp4TrackImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/210/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/Mp4TrackImpl.java
+END
+AbstractTrack.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/234/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/AbstractTrack.java
+END
+DateHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/187/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/DateHelper.java
+END

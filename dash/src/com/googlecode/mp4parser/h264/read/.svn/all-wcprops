@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/236/trunk/isoparser/src/main/java/com/googlecode/mp4parser/h264/read
+END
+SliceHeaderReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/236/trunk/isoparser/src/main/java/com/googlecode/mp4parser/h264/read/SliceHeaderReader.java
+END
+CAVLCReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/236/trunk/isoparser/src/main/java/com/googlecode/mp4parser/h264/read/CAVLCReader.java
+END
+BitstreamReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/236/trunk/isoparser/src/main/java/com/googlecode/mp4parser/h264/read/BitstreamReader.java
+END

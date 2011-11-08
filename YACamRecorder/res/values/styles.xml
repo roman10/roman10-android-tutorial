@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  styles for bottom menu buttons -->
+    	<style name="btn_bottommenu">
+    		<item name="android:layout_height">40dip</item>
+    		<item name="android:layout_width">200dip</item>
+    		<item name="android:textStyle">bold</item>
+			<item name="android:gravity">center_horizontal|center_vertical</item>
+			<item name="android:textSize">12dip</item>
+    	</style>
+    	<style name="filler_15dip">
+    		<item name="android:layout_width">fill_parent</item>
+    		<item name="android:layout_height">15dip</item>
+    		<item name="android:visibility">invisible</item>
+    	</style>
+</resources>
