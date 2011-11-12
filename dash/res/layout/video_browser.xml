@@ -50,10 +50,9 @@
 				  	android:layout_width="fill_parent"
 					/>
 				<Button android:id="@+id/video_browser_btn4" 
-				  	android:text="Convert"
+				  	android:text="Query"
 				  	style="@style/footbar_btn_short2"
 				  	android:layout_width="fill_parent"
-				  	android:visibility="gone"
 					/>
 		  	</TableRow>
 		</TableLayout>

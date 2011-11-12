@@ -1,9 +1,25 @@
 package roman10.media.dash;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.HttpVersion;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.CoreProtocolPNames;
+
+import roman10.http.SimpleMultipartEntity;
 import roman10.http.UploadService;
 import roman10.quickactionwindow.ActionItem3;
 import roman10.quickactionwindow.QuickAction3;
@@ -25,6 +41,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.AsyncTask.Status;
 import android.util.Log;
 import android.view.View;
@@ -266,6 +283,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	private Button btn_bottommenu1;
 	private Button btn_bottommenu2;
 	private Button btn_bottommenu3;
+	private Button btn_bottommenu4;
 	//title bar
 	private TextView text_titlebar_text;
 	private ImageButton btn_titlebar_right_btn1;
@@ -329,6 +347,15 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 				startUploadFiles();
 			}
 		});
+		btn_bottommenu4 = (Button) findViewById(R.id.video_browser_btn4);
+		btn_bottommenu4.setWidth(l_btnWidth);
+		btn_bottommenu4.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				//pop up a dialog to allow users to choose whether
+				handleQuery();
+			}
+		});
+		
 		btn_titlebar_left_btn1 = (ImageButton) findViewById(R.id.titlebar_left_btn1);
 		btn_titlebar_left_btn1.setBackgroundResource(R.drawable.top_menu_back);
 		btn_titlebar_left_btn1.setVisibility(View.GONE);
@@ -366,6 +393,134 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 			text_progress.setVisibility(View.GONE);
 		}
 		loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);
+	}
+	
+	private void handleQuery() {
+		final CharSequence[] VIEW_OPTIONS = {"Query Video List", "Query Playlist"};
+		AlertDialog.Builder l_builder = new AlertDialog.Builder(this);
+		l_builder.setTitle("Pls Choose One");
+		final int lOption = 0;
+		l_builder.setSingleChoiceItems(VIEW_OPTIONS, lOption, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				switch (which) {
+				case 0:
+					//query video list
+					new QueryVideoTask().execute();
+					break;
+				case 1:
+					//query playlist
+					new QueryPlaylistTask().execute();
+					break;
+				}
+			}
+		});
+		AlertDialog viewChoiceDiloag = l_builder.create();
+		viewChoiceDiloag.show();
+	}
+	
+	public String queryHttp(int _queryType) throws ClientProtocolException, IOException {
+		StringBuffer queryRes = new StringBuffer("");
+		HttpClient httpClient = new DefaultHttpClient();
+		try {
+			httpClient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
+			httpClient.getParams().setParameter("http.socket.timeout", new Integer(90000)); // 90 second 
+			
+			HttpGet httpGet;
+			if (_queryType == 1) {
+				httpGet = new HttpGet("http://cervino.ddns.comp.nus.edu.sg/~a0075306/query_video_list.php");
+			} else {
+				httpGet = new HttpGet("http://cervino.ddns.comp.nus.edu.sg/~a0075306/query_playlist.php");
+			}
+			
+			HttpResponse lResponse = httpClient.execute(httpGet);
+			if (lResponse.getStatusLine().getStatusCode() != HttpStatus.SC_OK) { 
+                Log.e("queryHttp","Response Status line code:"+ lResponse.getStatusLine()); 
+		    }
+			HttpEntity resEntity = lResponse.getEntity(); 
+            if (resEntity == null) { 
+                Log.e("queryHttp", "No Response!"); 
+            } else {
+            	BufferedReader br = new BufferedReader(new InputStreamReader(resEntity.getContent()));
+            	String line = "";
+                String NL = System.getProperty("line.separator");
+                while ((line = br.readLine()) != null) {
+                	queryRes.append(line + NL);
+                }
+                br.close();
+            }
+		} finally {
+			httpClient.getConnectionManager().shutdown(); 
+		}
+		return queryRes.toString();
+	}
+	
+	private class QueryVideoTask extends AsyncTask<Object, Integer, Object> {
+		@Override
+		protected void onPreExecute() {
+			showDialog(DIALOG_QUERY_VIDEO_LIST);
+		}
+		String resStr;
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			 try {
+				 resStr = queryHttp(1);
+	        } catch (Exception e) {
+				Log.e("QueryVideoTask-doInBackground", e.getMessage());
+			}
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Object res) {
+			try {
+				dismissDialog(DIALOG_QUERY_VIDEO_LIST);
+				//show a dialog with a list of videos available
+				//display a dialog to show the import results, and give user option to checkitout
+				String lMsg = "Video files available: \n" + resStr;
+				AlertDialog.Builder builder = new AlertDialog.Builder(VideoBrowser.this);
+				builder.setMessage(lMsg)
+				.setCancelable(false)
+				.setPositiveButton("Ok", null);
+				AlertDialog alert = builder.create();
+				alert.show();	
+			} catch (Exception e) {
+				Log.e("QueryVideoTask-onPostExecute", e.getMessage());
+			}
+		}
+	}
+	
+	private class QueryPlaylistTask extends AsyncTask<Object, Integer, Object> {
+		@Override
+		protected void onPreExecute() {
+			showDialog(DIALOG_QUERY_PLAYLIST);
+		}
+		String resStr;
+		@Override
+		protected Object doInBackground(Object... arg0) {
+			 try {
+				 resStr = queryHttp(2);
+	        } catch (Exception e) {
+				Log.e("QueryPlaylistTask-doInBackground", e.getMessage());
+			}
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Object res) {
+			try {
+				dismissDialog(DIALOG_QUERY_PLAYLIST);
+				//show a dialog with a list of videos available
+				//display a dialog to show the import results, and give user option to checkitout
+				String lMsg = "Playlist available: \n" + resStr;
+				AlertDialog.Builder builder = new AlertDialog.Builder(VideoBrowser.this);
+				builder.setMessage(lMsg)
+				.setCancelable(false)
+				.setPositiveButton("Ok", null);
+				AlertDialog alert = builder.create();
+				alert.show();	
+			} catch (Exception e) {
+				Log.e("QueryPlaylistTask-onPostExecute", e.getMessage());
+			}
+		}
 	}
 	
 	private void convertSelectedVideo() {
@@ -581,13 +736,30 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	
 	static final int DIALOG_LOAD_MEDIA = 1;
 	static final int DIALOG_HELP = 2;
+	static final int DIALOG_QUERY_VIDEO_LIST = 3;
+	static final int DIALOG_QUERY_PLAYLIST = 4;
 	@Override
 	protected Dialog onCreateDialog(int id) {
-        switch(id) {
+        ProgressDialog dialog;
+		switch(id) {
         case DIALOG_LOAD_MEDIA:
-        	ProgressDialog dialog = new ProgressDialog(this);
+        	dialog = new ProgressDialog(this);
 	        dialog.setTitle("Load Files");
 	        dialog.setMessage("Please wait while loading...");
+	        dialog.setIndeterminate(true);
+	        dialog.setCancelable(true);
+        	return dialog;
+        case DIALOG_QUERY_VIDEO_LIST:
+        	dialog = new ProgressDialog(this);
+	        dialog.setTitle("Query video list");
+	        dialog.setMessage("Please wait...");
+	        dialog.setIndeterminate(true);
+	        dialog.setCancelable(true);
+        	return dialog;
+        case DIALOG_QUERY_PLAYLIST:
+        	dialog = new ProgressDialog(this);
+	        dialog.setTitle("Query playlist");
+	        dialog.setMessage("Please wait...");
 	        dialog.setIndeterminate(true);
 	        dialog.setCancelable(true);
         	return dialog;
