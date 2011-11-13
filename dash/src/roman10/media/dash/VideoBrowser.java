@@ -594,7 +594,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		bar_progress.setProgress(0);
 		bar_progress.setVisibility(View.VISIBLE);
 		text_progress.setVisibility(View.VISIBLE);
-		text_progress.setText("Uploading files in progress...");
+		text_progress.setText("Uploading streamlet in progress...");
 		uploadInProgress = true;
 		//start streamlet service 
 		Intent l_intent = new Intent(getApplicationContext(), UploadService.class);
@@ -605,6 +605,8 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	 */
 	public static void updateUploadFilesProgress() {
 		if ((bar_progress!=null) && (text_progress!=null)) {
+			String lDisplayMsg = "Uploading streamlet in progress...     ";
+			text_progress.setText(lDisplayMsg + (int)(mCurrUploadFileNum*100/mNumOfSelectedVideosForUpload) + "%");
 			bar_progress.setProgress((int)(mCurrUploadFileNum*100/mNumOfSelectedVideosForUpload));
 		}
 	}
