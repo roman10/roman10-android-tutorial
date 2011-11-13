@@ -23,6 +23,10 @@
                   android:screenOrientation="landscape" 
     			  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>
+         <activity android:name="roman10.media.dash.VideoPlayer"
+                  android:screenOrientation="landscape" 
+    			  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        </activity>
 		<service android:enabled="true" 
         	android:name="roman10.media.dash.StreamletService"
         	>

@@ -38,6 +38,8 @@ import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -510,17 +512,59 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 				dismissDialog(DIALOG_QUERY_PLAYLIST);
 				//show a dialog with a list of videos available
 				//display a dialog to show the import results, and give user option to checkitout
-				String lMsg = "Playlist available: \n" + resStr;
+				String lMsg = "Playlist available";
+				final String[] items = resStr.split("\n");
 				AlertDialog.Builder builder = new AlertDialog.Builder(VideoBrowser.this);
-				builder.setMessage(lMsg)
-				.setCancelable(false)
-				.setPositiveButton("Ok", null);
+				builder.setTitle(lMsg);
+				builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						String url = "http://cervino.ddns.comp.nus.edu.sg/~a0075306/" + items[which];
+						selectPlayMethod(url);
+					}
+				});
 				AlertDialog alert = builder.create();
 				alert.show();	
 			} catch (Exception e) {
 				Log.e("QueryPlaylistTask-onPostExecute", e.getMessage());
 			}
 		}
+	}
+	
+	private void selectPlayMethod(final String url) {
+		String lMsg = "Select a Method to Play";
+		AlertDialog.Builder builder = new AlertDialog.Builder(VideoBrowser.this);
+		OnClickListener yesButtonListener = new OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				//play using browser
+				playVideoViaBrowser(url);
+			}
+		};
+		OnClickListener noButtonListener = new OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				//play using player
+				playVideoViaPlayer(url);
+			}
+		};
+		builder.setMessage(lMsg)
+		.setCancelable(true)
+		.setPositiveButton("Browser", yesButtonListener)
+		.setNegativeButton("Player", noButtonListener);
+		AlertDialog alert = builder.create();
+		alert.show();	
+	}
+	
+	private void playVideoViaPlayer(String url) {
+		Intent lIntent = new Intent();
+		lIntent.setClass(mContext, roman10.media.dash.VideoPlayer.class);
+		lIntent.putExtra(VideoPlayer.MEDIA, url);
+		this.startActivity(lIntent);
+	}
+	
+	private void playVideoViaBrowser(String url) {
+		Log.i("VideoBrowser-playvideo", url);
+		Intent f_intent = new Intent(Intent.ACTION_VIEW);
+		f_intent.setData(Uri.parse(url));
+		startActivity(f_intent);
 	}
 	
 	private void convertSelectedVideo() {
