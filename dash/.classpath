@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/home/roman10/Desktop/roman10-android-tutorial/dash/scannotation-1.0.2/scannotation-1.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/roman10/roman10-android-tutorial/dash/scannotation-1.0.2/scannotation-1.0.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

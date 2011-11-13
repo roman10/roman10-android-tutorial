@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import roman10.media.dash.R;
+import roman10.utils.DateTimeUtilsStatic;
 import roman10.utils.FileUtilsStatic;
 
 import android.app.Activity;
@@ -184,7 +185,7 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 				lDisplayMsg += "H263\n";
 				prMediaRecorder.setVideoEncoder(VideoEncoder.H263);
 			}
-			mVideoFileFullPath = FileUtilsStatic.DEFAULT_DIR + String.valueOf(System.currentTimeMillis()) + mVideoFileFullPath;
+			mVideoFileFullPath = FileUtilsStatic.DEFAULT_DIR + DateTimeUtilsStatic.get_current_date_time_format1_str() + mVideoFileFullPath;
 			prRecordedFile = new File(mVideoFileFullPath);
 			prMediaRecorder.setOutputFile(prRecordedFile.getPath());
 			int lRes = SettingsStatic.getResolutionChoice(this.getApplicationContext());
@@ -195,6 +196,7 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 			} else if (lRes == SettingsDialog.cpuRes720) {
 				prMediaRecorder.setVideoSize(720, 480);
 			} 
+			lDisplayMsg += "Video recording to file: " + mVideoFileFullPath;
 			Toast.makeText(prContext, lDisplayMsg, Toast.LENGTH_LONG).show();
 			prMediaRecorder.setVideoFrameRate(cFrameRate);
 			prMediaRecorder.setPreviewDisplay(prSurfaceHolder.getSurface());
@@ -223,7 +225,7 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Toast.makeText(this.getApplicationContext(), "Video recorded to " + mVideoFileFullPath, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this.getApplicationContext(), "Video saved to " + mVideoFileFullPath, Toast.LENGTH_SHORT).show();
 		prStartBtn.setText("Start");
 		prRecordInProcess = false;
 		prCamera.startPreview();
