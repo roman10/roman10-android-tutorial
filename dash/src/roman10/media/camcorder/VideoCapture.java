@@ -135,6 +135,7 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 		}
 	}
 	
+	private String mVideoFileFullPath;
 	private boolean startRecording() {
 		prCamera.stopPreview();
 		try {
@@ -146,20 +147,19 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 			prMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 			//set the file output format: 3gp or mp4
 			//state: Initialized=>DataSourceConfigured
-			String lVideoFileFullPath;
 			String lDisplayMsg = "Current container format: ";
 			int lContainerFormat = SettingsStatic.getContainerFormat(this.getApplicationContext());
 			if (lContainerFormat == SettingsDialog.cpu3GP) {
 				lDisplayMsg += "3GP\n";
-				lVideoFileFullPath = ".3gp";
+				mVideoFileFullPath = ".3gp";
 				prMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 			} else if (lContainerFormat == SettingsDialog.cpuMP4) {
 				lDisplayMsg += "MP4\n";
-				lVideoFileFullPath = ".mp4";
+				mVideoFileFullPath = ".mp4";
 				prMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
 			} else {
 				lDisplayMsg += "3GP\n";
-				lVideoFileFullPath = ".3gp";
+				mVideoFileFullPath = ".3gp";
 				prMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 			}
 			//the encoders: 
@@ -184,8 +184,8 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 				lDisplayMsg += "H263\n";
 				prMediaRecorder.setVideoEncoder(VideoEncoder.H263);
 			}
-			lVideoFileFullPath = FileUtilsStatic.DEFAULT_DIR + String.valueOf(System.currentTimeMillis()) + lVideoFileFullPath;
-			prRecordedFile = new File(lVideoFileFullPath);
+			mVideoFileFullPath = FileUtilsStatic.DEFAULT_DIR + String.valueOf(System.currentTimeMillis()) + mVideoFileFullPath;
+			prRecordedFile = new File(mVideoFileFullPath);
 			prMediaRecorder.setOutputFile(prRecordedFile.getPath());
 			int lRes = SettingsStatic.getResolutionChoice(this.getApplicationContext());
 			if (lRes == SettingsDialog.cpuRes176) {
@@ -223,6 +223,7 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		Toast.makeText(this.getApplicationContext(), "Video recorded to " + mVideoFileFullPath, Toast.LENGTH_SHORT).show();
 		prStartBtn.setText("Start");
 		prRecordInProcess = false;
 		prCamera.startPreview();
