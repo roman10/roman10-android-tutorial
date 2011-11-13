@@ -65,7 +65,7 @@ public class UploadService extends Service {
 			httpClient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 			httpClient.getParams().setParameter("http.socket.timeout", new Integer(90000)); // 90 second 
 			
-			HttpPost httpPost = new HttpPost("http://cervino.ddns.comp.nus.edu.sg/~a0075306/receive.php");
+			HttpPost httpPost = new HttpPost("http://cervino.ddns.comp.nus.edu.sg/~a0075306/receivefinal.php");
 //			File lFile = new File(pFileFullPathName);
 //			FileEntity lEntity;
 //			lEntity = new FileEntity(lFile, "binary/octet-stream"); 
