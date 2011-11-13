@@ -2,7 +2,6 @@ package roman10.media.dash;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -15,11 +14,9 @@ import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 
-import roman10.http.SimpleMultipartEntity;
 import roman10.http.UploadService;
 import roman10.quickactionwindow.ActionItem3;
 import roman10.quickactionwindow.QuickAction3;
@@ -38,14 +35,13 @@ import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.AsyncTask.Status;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -554,10 +550,14 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	}
 	
 	private void playVideoViaPlayer(String url) {
-		Intent lIntent = new Intent();
-		lIntent.setClass(mContext, roman10.media.dash.VideoPlayer.class);
-		lIntent.putExtra(VideoPlayer.MEDIA, url);
-		this.startActivity(lIntent);
+		Uri fileUri =Uri.parse(url); 
+		Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
+		myIntent.setDataAndType(fileUri, "application/*");
+		startActivity(myIntent);
+//		Intent lIntent = new Intent();
+//		lIntent.setClass(mContext, roman10.media.dash.VideoPlayer.class);
+//		lIntent.putExtra(VideoPlayer.MEDIA, url);
+//		this.startActivity(lIntent);
 	}
 	
 	private void playVideoViaBrowser(String url) {
@@ -777,6 +777,31 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
     	super.onConfigurationChanged(newConfig);
     	refreshUI();
     }
+	
+	private static final int MENU_CLEAR_ALL_FILES = 0;
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.clear();
+		menu.add(0, MENU_CLEAR_ALL_FILES, 0, "Delete All Files").setIcon(android.R.drawable.ic_delete);
+		return super.onPrepareOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		return true;
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+			case MENU_CLEAR_ALL_FILES:
+				FileUtilsStatic.deleteAllFiles();
+				refreshUI();
+				return true;
+		}
+		return false;
+	}
 	
 	static final int DIALOG_LOAD_MEDIA = 1;
 	static final int DIALOG_HELP = 2;

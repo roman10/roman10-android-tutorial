@@ -93,6 +93,36 @@ public class FileUtilsStatic {
 		}
 	}
 	
+	public static void deleteAllFiles() {
+		try {
+			File[] tfiles = new File(DEFAULT_STREAMLET_DIR).listFiles();
+			if (tfiles != null) {
+				for (File currentthumb : tfiles) {
+					if (!currentthumb.isDirectory()) {
+						currentthumb.delete();
+					}
+				}
+			}
+		} catch (Exception e) {
+			//dir not exists or cannot delete the file
+			e.printStackTrace();
+		}
+		
+		try {
+			File[] tfiles = new File(DEFAULT_DIR).listFiles();
+			if (tfiles != null) {
+				for (File currentthumb : tfiles) {
+					if (!currentthumb.isDirectory()) {
+						currentthumb.delete();
+					}
+				}
+			}
+		} catch (Exception e) {
+			//dir not exists or cannot delete the file
+			e.printStackTrace();
+		}
+	}
+	
 	public static void initDirs() {
 		createDirIfNotExist(DEFAULT_DIR);
 		createDirIfNotExist(DEFAULT_STREAMLET_DIR);
