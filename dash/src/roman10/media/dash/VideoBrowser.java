@@ -24,6 +24,7 @@ import roman10.ui.iconifiedtextselectedlist.IconifiedTextSelected;
 import roman10.ui.iconifiedtextselectedlist.IconifiedTextSelectedView;
 import roman10.utils.EnvUtils;
 import roman10.utils.FileUtilsStatic;
+import roman10.utils.SortingUtilsStatic;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -265,6 +266,8 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		}
 		@Override
 		protected void onPostExecute(Void n) {
+			//sorting the videos before display
+			SortingUtilsStatic.sortRecordsByAZAsc(displayEntries);
 			refreshUI();
 			try {
 				dismissDialog(DIALOG_LOAD_MEDIA);
@@ -656,6 +659,8 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	 */
 	public static void updateGeneratingStreamletProgress() {
 		if ((bar_progress!=null) && (text_progress!=null)) {
+			String lDisplayMsg = "Generating streamlet in progress...     ";
+			text_progress.setText(lDisplayMsg + (int)(mCurrProcessStreamletNum*100/mTotalNumStreamlets) + "%");
 			bar_progress.setProgress((int)(mCurrProcessStreamletNum*100/mTotalNumStreamlets));
 		}
 	}
@@ -779,10 +784,12 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
     }
 	
 	private static final int MENU_CLEAR_ALL_FILES = 0;
+	private static final int MENU_DELETE_SELECTED = 1;
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
 		menu.add(0, MENU_CLEAR_ALL_FILES, 0, "Delete All Files").setIcon(android.R.drawable.ic_delete);
+		menu.add(0, MENU_DELETE_SELECTED, 0, "Delete Selected Files").setIcon(android.R.drawable.ic_input_delete);
 		return super.onPrepareOptionsMenu(menu);
 	}
 	
@@ -799,6 +806,16 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 				FileUtilsStatic.deleteAllFiles();
 				refreshUI();
 				return true;
+			case MENU_DELETE_SELECTED:
+				for (int i = 0; i < this.mSelected.size(); ++i) {
+					if (this.mSelected.get(i)) {
+						File lFile = new File(displayEntries.get(i).getText());
+						if (lFile!=null && lFile.isFile()) {
+							lFile.delete();
+						}
+					}
+				}
+				refreshUI();
 		}
 		return false;
 	}

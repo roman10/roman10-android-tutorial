@@ -162,15 +162,17 @@ public class StreamletService extends Service {
 					String lFileNameWithoutExt = lFileFullPathName.substring(lFileFullPathName.lastIndexOf("/") + 1, lFileFullPathName.lastIndexOf("."));
 					double lVideoLen = getVideoLengthInSeconds(lFileFullPathName);
 					VideoBrowser.mTotalNumStreamlets = (int)lVideoLen/STREAMLET_INTERVAL + 1;
+					Log.i("streamlet-service", String.valueOf(VideoBrowser.mTotalNumStreamlets) + ":" + lVideoLen);
 					if (lVideoLen <= STREAMLET_INTERVAL) {
 						//the video is less than 10 seconds, we simple rename and copy it to streamlet folder
-						copyFile(lFileFullPathName, String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "%s-%.2f-%.2f.mp4", lFileNameWithoutExt, 0.0, lVideoLen));
+						copyFile(lFileFullPathName, String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "%s_%.2f_%.2f_%d.mp4", lFileNameWithoutExt, 0.0, lVideoLen, 1));
 						VideoBrowser.mCurrProcessStreamletNum++;
 						lSkip[fi] = true;
 					} else {
 						lSkip[fi] = false;
 					}
 				}
+				this.publishProgress();
 				//1. generate the streamlets 
 				for (int fi = 0; fi < VideoBrowser.mStreamletFileNameList.size(); ++fi) {
 					if (lSkip[fi]) { continue; }
@@ -179,7 +181,7 @@ public class StreamletService extends Service {
 					Movie movie = new MovieCreator().build(new IsoBufferWrapperImpl(new File(VideoBrowser.mStreamletFileNameList.get(fi))));
 
 					List<Track> tracks = movie.getTracks();
-					Log.i("Streamlet-Service", "number of tracks: " + tracks.size());
+					//Log.i("Streamlet-Service", "number of tracks: " + tracks.size());
 					movie.setTracks(new LinkedList<Track>());//remove all tracks we will create new tracks from the old
 
 					//TODO: need to pay attention to memory usage, if the video is big, this method might
@@ -219,6 +221,7 @@ public class StreamletService extends Service {
 					for (int i = 0; i < currentSampleForAllTracks.length; ++i) {
 						currentSampleForAllTracks[i] = 1;
 					}
+					/* code for debug
 					for (int cnt = 0; cnt < tracks.size(); ++cnt) {
 						Track track = tracks.get(cnt);
 						long[] tt = track.getSyncSamples();
@@ -231,7 +234,7 @@ public class StreamletService extends Service {
 					}
 					for (int xx = 0; xx < streamletsRec.size(); ++xx) {
 						Log.e("Streamlet-service", "streamlet rec: " + streamletsRec.get(xx).startSample + ":" + streamletsRec.get(xx).endSample + "time:" + streamletsRec.get(xx).startTime + ":" + streamletsRec.get(xx).endTime);
-					}
+					}*/
 					double[] currentTimeForAllTracks = new double[tracks.size()];
 					int[] js = new int[tracks.size()];
 					int[] ks = new int[tracks.size()];
@@ -240,7 +243,7 @@ public class StreamletService extends Service {
 							Track track = tracks.get(cnt);
 							if (track.getSyncSamples()!=null && track.getSyncSamples().length > 0) {
 								//if it's sync track, we just read the startSample and endSample
-								Log.e("StreamletService", "track " + cnt + ": " + streamletsRec.get(i).startSample + "-" + (streamletsRec.get(i).endSample + 1));
+								//Log.e("StreamletService", "track " + cnt + ": " + streamletsRec.get(i).startSample + "-" + (streamletsRec.get(i).endSample + 1));
 								movie.addTrack(new CroppedTrack(track, streamletsRec.get(i).startSample, streamletsRec.get(i).endSample + 1));
 							} else {
 								//if it's not sync track, we use time to get the start and end samples
@@ -261,14 +264,14 @@ public class StreamletService extends Service {
 									if (foundEnd) break;
 								}
 								//as CroppedTrack is [Start, end), we use endSample + 1
-								Log.e("StreamletService", "track " + cnt + ": " + startSample + "-" + (endSample + 1));
+								//Log.e("StreamletService", "track " + cnt + ": " + startSample + "-" + (endSample + 1));
 								movie.addTrack(new CroppedTrack(track, startSample, endSample + 1));
 							}
 						}
 						//dump all segmented tracks to file
     					IsoFile out = new DefaultMp4Builder().build(movie);
-						FileOutputStream fos = new FileOutputStream(new File(String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "%s-%.2f-%.2f.mp4", lFileNameWithoutExt, streamletsRec.get(i).startTime, streamletsRec.get(i).endTime)));
-						Log.i("StreamletService", String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "%s-%.2f-%.2f.mp4", lFileNameWithoutExt, streamletsRec.get(i).startTime, streamletsRec.get(i).endTime));
+						FileOutputStream fos = new FileOutputStream(new File(String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "%s_%.2f_%.2f_%d.mp4", lFileNameWithoutExt, streamletsRec.get(i).startTime, streamletsRec.get(i).endTime, (i+1))));
+						//Log.i("StreamletService", String.format(FileUtilsStatic.DEFAULT_STREAMLET_DIR + "%s-%.2f-%.2f_%d.mp4", lFileNameWithoutExt, streamletsRec.get(i).startTime, streamletsRec.get(i).endTime, (i+1)));
 						out.getBox(new IsoOutputStream(fos));
 						fos.close();
 						movie.setTracks(new LinkedList<Track>());//remove all tracks we will create new tracks from the old
