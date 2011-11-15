@@ -11,19 +11,12 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.params.HttpParams;
 
-import roman10.http.UploadFile;
 import roman10.http.UploadService;
 import roman10.quickactionwindow.ActionItem3;
 import roman10.quickactionwindow.QuickAction3;
@@ -37,15 +30,18 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.AsyncTask.Status;
 import android.util.Log;
 import android.view.Menu;
@@ -70,12 +66,29 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	/**
 	 * activity life cycle: this part of the source code deals with activity life cycle
 	 */
+	private BroadcastReceiver upladInterruptedReceiver;
+	public static String upladInterruptedReceiver_ACTION = "UPLOAD_INTERRUPTED";
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		mContext = this.getApplicationContext();
 		self = this;
 		FileUtilsStatic.initDirs();
+		upladInterruptedReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context arg0, Intent arg1) {
+				Bundle b = arg1.getExtras();
+				if (b != null) {
+					if (b.getString("action").compareTo(upladInterruptedReceiver_ACTION)==0) {
+						Log.e("receiver", "upload interrupted");
+						checkIfWeCanUpload();
+					}
+				}
+			}
+		};
+		IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_ATTACH_DATA);
+		mContext.registerReceiver(upladInterruptedReceiver, filter);
 		initUI();
 	}
 	
@@ -175,6 +188,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		for (int i = 0; i < l_count; ++i) {
 			if (mSelected.get(i)) {
 				mUploadFileNameList.add(displayEntries.get(i).getText());
+				UploadService.addUploadFile(displayEntries.get(i).getText());
 				++l_selected;
 			}
 		}
@@ -340,6 +354,9 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 			public void onClick(View v) {
 				/*upload video*/
 				//count the number of entries selected
+				if (UploadService.noFileToUpload()) {
+					mCurrUploadFileNum = 0;
+				}
 				mNumOfSelectedVideosForUpload = getVideoFileNamesForUpload();
 				if(mNumOfSelectedVideosForUpload == 0) {
 					Toast.makeText(mContext, "No Video is Selected to upload!", Toast.LENGTH_SHORT).show();
@@ -427,52 +444,52 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		viewChoiceDiloag.show();
 	}
 	
-	public List<UploadFile> requestFileStatus() {
-		List<UploadFile> list = new ArrayList<UploadFile>();
-		// Create a new HttpClient 
-	    HttpClient httpclient = new DefaultHttpClient();
-		try {
-			//Post Header
-		    HttpPost httppost = new HttpPost("http://cervino.ddns.comp.nus.edu.sg/~a0075306/startupload.php");
-//			HttpGet httpget = new HttpGet("http://cervino.ddns.comp.nus.edu.sg/~a0075306/startupload.php");
-	        // Add data
-	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(mUploadFileNameList.size());
-	        //nameValuePairs.add(new BasicNameValuePair("num", String.valueOf(mUploadFileNameList.size())));
-	        for (int i = 0; i < mUploadFileNameList.size(); ++i) {
-	        	String lFileFullPathName = VideoBrowser.mUploadFileNameList.get(i);
-				String lFileName = lFileFullPathName.substring(lFileFullPathName.lastIndexOf("/")+1);
-	        	nameValuePairs.add(new BasicNameValuePair("filename[" + i + "]", lFileName));
-	        }
-	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//	        HttpParams params = new BasicHttpParams();
-//	        params.setParameter(name, value);
-//	        httpget.setParams(params);
-	        // Execute HTTP Post Request
-	        HttpResponse response = httpclient.execute(httppost);
-	        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) { 
-                Log.e("queryHttp","Response Status line code:"+ response.getStatusLine()); 
-		    }
-			HttpEntity resEntity = response.getEntity(); 
-            if (resEntity == null) { 
-                Log.e("queryHttp", "No Response!"); 
-            } else {
-            	BufferedReader br = new BufferedReader(new InputStreamReader(resEntity.getContent()));
-            	String line = "";
-                String NL = System.getProperty("line.separator");
-                while ((line = br.readLine()) != null) {
-                	Log.i("http reply", (line + NL));
-                }
-                br.close();
-            }
-	    } catch (ClientProtocolException e) {
-	        // TODO Auto-generated catch block
-	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
-	    } finally {
-	    	httpclient.getConnectionManager().shutdown(); 
-	    }
-		return list;
-	}
+//	public List<UploadFile> requestFileStatus() {
+//		List<UploadFile> list = new ArrayList<UploadFile>();
+//		// Create a new HttpClient 
+//	    HttpClient httpclient = new DefaultHttpClient();
+//		try {
+//			//Post Header
+//		    HttpPost httppost = new HttpPost("http://cervino.ddns.comp.nus.edu.sg/~a0075306/startupload.php");
+////			HttpGet httpget = new HttpGet("http://cervino.ddns.comp.nus.edu.sg/~a0075306/startupload.php");
+//	        // Add data
+//	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(mUploadFileNameList.size());
+//	        //nameValuePairs.add(new BasicNameValuePair("num", String.valueOf(mUploadFileNameList.size())));
+//	        for (int i = 0; i < mUploadFileNameList.size(); ++i) {
+//	        	String lFileFullPathName = VideoBrowser.mUploadFileNameList.get(i);
+//				String lFileName = lFileFullPathName.substring(lFileFullPathName.lastIndexOf("/")+1);
+//	        	nameValuePairs.add(new BasicNameValuePair("filename[" + i + "]", lFileName));
+//	        }
+//	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+////	        HttpParams params = new BasicHttpParams();
+////	        params.setParameter(name, value);
+////	        httpget.setParams(params);
+//	        // Execute HTTP Post Request
+//	        HttpResponse response = httpclient.execute(httppost);
+//	        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) { 
+//                Log.e("queryHttp","Response Status line code:"+ response.getStatusLine()); 
+//		    }
+//			HttpEntity resEntity = response.getEntity(); 
+//            if (resEntity == null) { 
+//                Log.e("queryHttp", "No Response!"); 
+//            } else {
+//            	BufferedReader br = new BufferedReader(new InputStreamReader(resEntity.getContent()));
+//            	String line = "";
+//                String NL = System.getProperty("line.separator");
+//                while ((line = br.readLine()) != null) {
+//                	Log.i("http reply", (line + NL));
+//                }
+//                br.close();
+//            }
+//	    } catch (ClientProtocolException e) {
+//	        // TODO Auto-generated catch block
+//	    } catch (IOException e) {
+//	        // TODO Auto-generated catch block
+//	    } finally {
+//	    	httpclient.getConnectionManager().shutdown(); 
+//	    }
+//		return list;
+//	}
 	
 	public String queryHttp(int _queryType) throws ClientProtocolException, IOException {
 		StringBuffer queryRes = new StringBuffer("");
@@ -481,11 +498,13 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 			httpClient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 			httpClient.getParams().setParameter("http.socket.timeout", new Integer(90000)); // 90 second 
 			
-			HttpGet httpGet;
+			HttpGet httpGet = null;
 			if (_queryType == 1) {
 				httpGet = new HttpGet("http://cervino.ddns.comp.nus.edu.sg/~a0075306/query_video_list.php");
-			} else {
+			} else if (_queryType == 2) {
 				httpGet = new HttpGet("http://cervino.ddns.comp.nus.edu.sg/~a0075306/query_playlist.php");
+			} else if (_queryType == 3) {
+				httpGet = new HttpGet("http://cervino.ddns.comp.nus.edu.sg/~a0075306/deleterepo.php");
 			}
 			
 			HttpResponse lResponse = httpClient.execute(httpGet);
@@ -643,17 +662,21 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	/**
 	 * start uploading
 	 */
-	private void startUploadFiles() {
+	private static void startUploadFiles() {
 		//prepare for generating streamlet
-		bar_progress.setProgress(0);
+		if (mCurrUploadFileNum == 0) {
+			bar_progress.setProgress(0);
+			text_progress.setText("Uploading streamlet in progress...");
+		} else {
+			Toast.makeText(VideoBrowser.self.getApplicationContext(), "Continue uploading...", Toast.LENGTH_LONG).show();
+		}
 		bar_progress.setVisibility(View.VISIBLE);
 		text_progress.setVisibility(View.VISIBLE);
-		text_progress.setText("Uploading streamlet in progress...");
 		uploadInProgress = true;
-		//start streamlet service 
-		Intent l_intent = new Intent(getApplicationContext(), UploadService.class);
-		startService(l_intent);
 		//requestFileStatus();
+		//start streamlet service 
+		Intent l_intent = new Intent(VideoBrowser.self.getApplicationContext(), UploadService.class);
+		VideoBrowser.self.startService(l_intent);
 	}
 	/**
 	 * update the progress text 
@@ -680,22 +703,53 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 			try {
 				//display a dialog to show the results
 				String lMsg = "Video Files Selected: " + mNumOfSelectedVideosForUpload + "\nNumber of Files Uploaded: " + mCurrUploadFileNum;
-				OnClickListener yesButtonListener = new OnClickListener() {
-					public void onClick(DialogInterface arg0, int arg1) {
-						VideoBrowser.self.loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);
-					}
-				};
-				AlertDialog.Builder builder = new AlertDialog.Builder(VideoBrowser.self);
-				builder.setMessage(lMsg)
-				.setCancelable(false)
-				.setPositiveButton("Ok", yesButtonListener);
-				AlertDialog alert = builder.create();
-				alert.show();	
+				if (mCurrUploadFileNum < mNumOfSelectedVideosForUpload) {
+					lMsg += "\nFiles will be resumed uploading when Network is back!";
+				}
+				Toast.makeText(VideoBrowser.self.getApplicationContext(), lMsg, Toast.LENGTH_LONG).show();
+//				OnClickListener yesButtonListener = new OnClickListener() {
+//					public void onClick(DialogInterface arg0, int arg1) {
+//						//VideoBrowser.self.loadVideosFromDirectory(FileUtilsStatic.DEFAULT_DIR);
+//					}
+//				};
+//				AlertDialog.Builder builder = new AlertDialog.Builder(VideoBrowser.self);
+//				builder.setMessage(lMsg)
+//				.setCancelable(false)
+//				.setPositiveButton("Ok", yesButtonListener);
+//				AlertDialog alert = builder.create();
+//				alert.show();	
 			}catch (Exception le) {
 				Log.e("VideoBrowser-finishedGeneratingStreamlet", le.getMessage());
 			}
 		}
 	}
+	
+	private static Handler resumedUploadHandler;
+    private static boolean mCheck = false;
+    public static void checkIfWeCanUpload() {
+    	mCheck = true;
+    	resumedUploadHandler = new Handler();
+		try {
+			 Runnable mEnableTask = new Runnable() {
+				public void run() {
+					if (mCheck==false) {
+						resumedUploadHandler.removeCallbacks(this);
+						return;
+					}
+					if (EnvUtils.isOnline(VideoBrowser.self.getApplicationContext())) {
+						Log.i("handler", "network access is back");
+						startUploadFiles();
+					}
+					//show the reset button for 3 seconds
+					resumedUploadHandler.postDelayed(this, 10000);
+				}
+			 };
+			 resumedUploadHandler.removeCallbacks(mEnableTask);
+			 resumedUploadHandler.postDelayed(mEnableTask, 10000);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
 	
 	/**
 	 * start generating streamlet
@@ -842,11 +896,13 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	
 	private static final int MENU_CLEAR_ALL_FILES = 0;
 	private static final int MENU_DELETE_SELECTED = 1;
+	private static final int MENU_DELTE_REMOTE_FILES = 2;
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
 		menu.add(0, MENU_CLEAR_ALL_FILES, 0, "Delete All Files").setIcon(android.R.drawable.ic_delete);
 		menu.add(0, MENU_DELETE_SELECTED, 0, "Delete Selected Files").setIcon(android.R.drawable.ic_input_delete);
+		menu.add(0, MENU_DELTE_REMOTE_FILES, 0, "Delete Remote Files").setIcon(android.R.drawable.ic_input_delete);
 		return super.onPrepareOptionsMenu(menu);
 	}
 	
@@ -873,6 +929,16 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 					}
 				}
 				refreshUI();
+			case MENU_DELTE_REMOTE_FILES:
+			try {
+				queryHttp(3);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return false;
 	}

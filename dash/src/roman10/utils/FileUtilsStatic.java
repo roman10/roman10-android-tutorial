@@ -22,6 +22,8 @@ public class FileUtilsStatic {
 	private static final String TAG = "FileUtilsStatic";
 	public static final String DEFAULT_DIR = "/sdcard/adash/";
 	public static final String DEFAULT_STREAMLET_DIR = DEFAULT_DIR + "streamlet/";
+	public static final String DEFAULT_TMP_DIR = DEFAULT_DIR + "tmp/";
+	
 
 	public static boolean is_external_storage_available() {
 		//String test = Environment.getExternalStorageState();
@@ -109,6 +111,20 @@ public class FileUtilsStatic {
 		}
 		
 		try {
+			File[] tfiles = new File(DEFAULT_TMP_DIR).listFiles();
+			if (tfiles != null) {
+				for (File currentthumb : tfiles) {
+					if (!currentthumb.isDirectory()) {
+						currentthumb.delete();
+					}
+				}
+			}
+		} catch (Exception e) {
+			//dir not exists or cannot delete the file
+			e.printStackTrace();
+		}
+		
+		try {
 			File[] tfiles = new File(DEFAULT_DIR).listFiles();
 			if (tfiles != null) {
 				for (File currentthumb : tfiles) {
@@ -126,6 +142,7 @@ public class FileUtilsStatic {
 	public static void initDirs() {
 		createDirIfNotExist(DEFAULT_DIR);
 		createDirIfNotExist(DEFAULT_STREAMLET_DIR);
+		createDirIfNotExist(DEFAULT_TMP_DIR);
 	}
 	
 	

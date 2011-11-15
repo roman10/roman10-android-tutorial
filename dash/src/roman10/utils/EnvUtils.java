@@ -17,7 +17,8 @@ public class EnvUtils {
 		 if (ni == null) {
 			 return false;
 		 } else {
-			 return ni.isConnectedOrConnecting();
+			 return ni.isConnected();
+			 //return ni.isConnectedOrConnecting();
 		 }
 	}
 	
