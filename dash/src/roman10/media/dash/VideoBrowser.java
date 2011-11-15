@@ -739,6 +739,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 					if (EnvUtils.isOnline(VideoBrowser.self.getApplicationContext())) {
 						Log.i("handler", "network access is back");
 						startUploadFiles();
+						mCheck = false;
 					}
 					//show the reset button for 3 seconds
 					resumedUploadHandler.postDelayed(this, 10000);
