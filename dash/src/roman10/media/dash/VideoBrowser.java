@@ -11,12 +11,19 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpParams;
 
+import roman10.http.UploadFile;
 import roman10.http.UploadService;
 import roman10.quickactionwindow.ActionItem3;
 import roman10.quickactionwindow.QuickAction3;
@@ -420,6 +427,53 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		viewChoiceDiloag.show();
 	}
 	
+	public List<UploadFile> requestFileStatus() {
+		List<UploadFile> list = new ArrayList<UploadFile>();
+		// Create a new HttpClient 
+	    HttpClient httpclient = new DefaultHttpClient();
+		try {
+			//Post Header
+		    HttpPost httppost = new HttpPost("http://cervino.ddns.comp.nus.edu.sg/~a0075306/startupload.php");
+//			HttpGet httpget = new HttpGet("http://cervino.ddns.comp.nus.edu.sg/~a0075306/startupload.php");
+	        // Add data
+	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(mUploadFileNameList.size());
+	        //nameValuePairs.add(new BasicNameValuePair("num", String.valueOf(mUploadFileNameList.size())));
+	        for (int i = 0; i < mUploadFileNameList.size(); ++i) {
+	        	String lFileFullPathName = VideoBrowser.mUploadFileNameList.get(i);
+				String lFileName = lFileFullPathName.substring(lFileFullPathName.lastIndexOf("/")+1);
+	        	nameValuePairs.add(new BasicNameValuePair("filename[" + i + "]", lFileName));
+	        }
+	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//	        HttpParams params = new BasicHttpParams();
+//	        params.setParameter(name, value);
+//	        httpget.setParams(params);
+	        // Execute HTTP Post Request
+	        HttpResponse response = httpclient.execute(httppost);
+	        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) { 
+                Log.e("queryHttp","Response Status line code:"+ response.getStatusLine()); 
+		    }
+			HttpEntity resEntity = response.getEntity(); 
+            if (resEntity == null) { 
+                Log.e("queryHttp", "No Response!"); 
+            } else {
+            	BufferedReader br = new BufferedReader(new InputStreamReader(resEntity.getContent()));
+            	String line = "";
+                String NL = System.getProperty("line.separator");
+                while ((line = br.readLine()) != null) {
+                	Log.i("http reply", (line + NL));
+                }
+                br.close();
+            }
+	    } catch (ClientProtocolException e) {
+	        // TODO Auto-generated catch block
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	    } finally {
+	    	httpclient.getConnectionManager().shutdown(); 
+	    }
+		return list;
+	}
+	
 	public String queryHttp(int _queryType) throws ClientProtocolException, IOException {
 		StringBuffer queryRes = new StringBuffer("");
 		HttpClient httpClient = new DefaultHttpClient();
@@ -599,6 +653,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		//start streamlet service 
 		Intent l_intent = new Intent(getApplicationContext(), UploadService.class);
 		startService(l_intent);
+		//requestFileStatus();
 	}
 	/**
 	 * update the progress text 

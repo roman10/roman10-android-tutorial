@@ -165,8 +165,8 @@ public class VideoCapture extends Activity implements SurfaceHolder.Callback {
 			}
 			//the encoders: 
 			//audio: AMR-NB
-			//prMediaRecorder.setAudioEncoder(AudioEncoder.AMR_NB);
-			prMediaRecorder.setAudioEncoder(AudioEncoder.AAC);
+			prMediaRecorder.setAudioEncoder(AudioEncoder.AMR_NB);
+			//prMediaRecorder.setAudioEncoder(AudioEncoder.AAC);
 			//video: H.263, MP4-SP, or H.264
 			//prMediaRecorder.setVideoEncoder(VideoEncoder.H263);
 			//prMediaRecorder.setVideoEncoder(VideoEncoder.MPEG_4_SP);
