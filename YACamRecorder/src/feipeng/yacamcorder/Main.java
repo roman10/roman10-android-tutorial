@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
+import android.media.MediaRecorder.AudioEncoder;
 import android.media.MediaRecorder.VideoEncoder;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
@@ -153,7 +154,7 @@ public class Main extends Activity implements SurfaceHolder.Callback {
 			}
 			//the encoders: 
 			//audio: AMR-NB
-			//prMediaRecorder.setAudioEncoder(AudioEncoder.AMR_NB);
+			prMediaRecorder.setAudioEncoder(AudioEncoder.AMR_NB);
 			//video: H.263, MP4-SP, or H.264
 			//prMediaRecorder.setVideoEncoder(VideoEncoder.H263);
 			//prMediaRecorder.setVideoEncoder(VideoEncoder.MPEG_4_SP);
