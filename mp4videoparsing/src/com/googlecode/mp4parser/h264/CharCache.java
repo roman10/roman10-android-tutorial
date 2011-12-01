@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -18,44 +18,40 @@ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 OR OTHER DEALINGS IN THE SOFTWARE.
 */
-package com.googlecode.mp4parser.h264.model;
+package com.googlecode.mp4parser.h264;
 
-/**
- * Contains reordering instructions for reference picture list
- *
- * @author Stanislav Vitvitskiy
- */
-public class RefPicReordering {
+public class CharCache {
+    private char[] cache;
+    private int pos;
 
-    public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
+    public CharCache(int capacity) {
+        cache = new char[capacity];
+    }
 
-    public static class ReorderOp {
-        private InstrType type;
-        private int param;
+    public void append(String str) {
+        char[] chars = str.toCharArray();
+        int available = cache.length - pos;
+        int toWrite = chars.length < available ? chars.length : available;
+        System.arraycopy(chars, 0, cache, pos, toWrite);
+        pos += toWrite;
+    }
 
-        public ReorderOp(InstrType type, int param) {
-            this.type = type;
-            this.param = param;
-        }
+    public String toString() {
+        return new String(cache, 0, pos);
+    }
 
-        public InstrType getType() {
-            return type;
-        }
+    public void clear() {
+        pos = 0;
+    }
 
-        public int getParam() {
-            return param;
+    public void append(char c) {
+        if (pos < cache.length - 1) {
+            cache[pos] = c;
+            pos++;
         }
     }
 
-    private ReorderOp[] instructions;
-
-    public RefPicReordering(ReorderOp[] instructions) {
-        this.instructions = instructions;
-    }
-
-    public ReorderOp[] getInstructions() {
-        return instructions;
+    public int length() {
+        return pos;
     }
 }

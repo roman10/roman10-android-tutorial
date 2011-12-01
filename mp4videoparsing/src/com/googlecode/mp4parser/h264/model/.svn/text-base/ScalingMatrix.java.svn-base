@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -20,42 +20,18 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 */
 package com.googlecode.mp4parser.h264.model;
 
-/**
- * Contains reordering instructions for reference picture list
- *
- * @author Stanislav Vitvitskiy
- */
-public class RefPicReordering {
+import java.util.Arrays;
 
-    public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
+public class ScalingMatrix {
 
-    public static class ReorderOp {
-        private InstrType type;
-        private int param;
+    public ScalingList[] ScalingList4x4;
+    public ScalingList[] ScalingList8x8;
 
-        public ReorderOp(InstrType type, int param) {
-            this.type = type;
-            this.param = param;
-        }
-
-        public InstrType getType() {
-            return type;
-        }
-
-        public int getParam() {
-            return param;
-        }
-    }
-
-    private ReorderOp[] instructions;
-
-    public RefPicReordering(ReorderOp[] instructions) {
-        this.instructions = instructions;
-    }
-
-    public ReorderOp[] getInstructions() {
-        return instructions;
+    @Override
+    public String toString() {
+        return "ScalingMatrix{" +
+                "ScalingList4x4=" + (ScalingList4x4 == null ? null : Arrays.asList(ScalingList4x4)) + "\n" +
+                ", ScalingList8x8=" + (ScalingList8x8 == null ? null : Arrays.asList(ScalingList8x8)) + "\n" +
+                '}';
     }
 }

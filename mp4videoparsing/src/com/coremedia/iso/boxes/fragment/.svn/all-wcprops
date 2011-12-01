@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/238/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment
+END
+MovieFragmentRandomAccessBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/MovieFragmentRandomAccessBox.java
+END
+TrackFragmentBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/TrackFragmentBox.java
+END
+TrackRunBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/TrackRunBox.java
+END
+MovieFragmentRandomAccessOffsetBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/MovieFragmentRandomAccessOffsetBox.java
+END
+TrackExtendsBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/TrackExtendsBox.java
+END
+SubSampleInformationBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/147/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/SubSampleInformationBox.java
+END
+SampleToGroupBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/147/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/SampleToGroupBox.java
+END
+TrackFragmentHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/TrackFragmentHeaderBox.java
+END
+MovieFragmentBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/214/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/MovieFragmentBox.java
+END
+TrackFragmentBaseMediaDecodeTimeBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/!svn/ver/238/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/TrackFragmentBaseMediaDecodeTimeBox.java
+END
+MovieExtendsBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/MovieExtendsBox.java
+END
+TrackFragmentRandomAccessBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/TrackFragmentRandomAccessBox.java
+END
+MovieFragmentHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/MovieFragmentHeaderBox.java
+END
+MovieExtendsHeaderBox.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/MovieExtendsHeaderBox.java
+END
+SampleFlags.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/2/trunk/isoparser/src/main/java/com/coremedia/iso/boxes/fragment/SampleFlags.java
+END

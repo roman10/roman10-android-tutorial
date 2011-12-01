@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/237/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/builder
+END
+FragmentIntersectionFinder.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/!svn/ver/216/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/builder/FragmentIntersectionFinder.java
+END
+FragmentedMp4Builder.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/!svn/ver/237/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/builder/FragmentedMp4Builder.java
+END
+Mp4Builder.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/204/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/builder/Mp4Builder.java
+END
+SyncSampleIntersectFinderImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/!svn/ver/216/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/builder/SyncSampleIntersectFinderImpl.java
+END
+DefaultMp4Builder.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/237/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/builder/DefaultMp4Builder.java
+END

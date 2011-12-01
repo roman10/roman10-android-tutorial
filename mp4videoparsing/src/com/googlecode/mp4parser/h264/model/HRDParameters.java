@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -20,42 +20,17 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 */
 package com.googlecode.mp4parser.h264.model;
 
-/**
- * Contains reordering instructions for reference picture list
- *
- * @author Stanislav Vitvitskiy
- */
-public class RefPicReordering {
+public class HRDParameters {
 
-    public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
+    public int cpb_cnt_minus1;
+    public int bit_rate_scale;
+    public int cpb_size_scale;
+    public int[] bit_rate_value_minus1;
+    public int[] cpb_size_value_minus1;
+    public boolean[] cbr_flag;
+    public int initial_cpb_removal_delay_length_minus1;
+    public int cpb_removal_delay_length_minus1;
+    public int dpb_output_delay_length_minus1;
+    public int time_offset_length;
 
-    public static class ReorderOp {
-        private InstrType type;
-        private int param;
-
-        public ReorderOp(InstrType type, int param) {
-            this.type = type;
-            this.param = param;
-        }
-
-        public InstrType getType() {
-            return type;
-        }
-
-        public int getParam() {
-            return param;
-        }
-    }
-
-    private ReorderOp[] instructions;
-
-    public RefPicReordering(ReorderOp[] instructions) {
-        this.instructions = instructions;
-    }
-
-    public ReorderOp[] getInstructions() {
-        return instructions;
-    }
 }

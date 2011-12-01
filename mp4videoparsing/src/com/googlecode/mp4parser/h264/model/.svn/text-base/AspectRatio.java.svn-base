@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -21,41 +21,30 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 package com.googlecode.mp4parser.h264.model;
 
 /**
- * Contains reordering instructions for reference picture list
+ * Aspect ratio
+ * <p/>
+ * dynamic enum
  *
  * @author Stanislav Vitvitskiy
  */
-public class RefPicReordering {
+public class AspectRatio {
 
-    public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
+    public static final AspectRatio Extended_SAR = new AspectRatio(255);
 
-    public static class ReorderOp {
-        private InstrType type;
-        private int param;
+    private int value;
 
-        public ReorderOp(InstrType type, int param) {
-            this.type = type;
-            this.param = param;
-        }
-
-        public InstrType getType() {
-            return type;
-        }
-
-        public int getParam() {
-            return param;
-        }
+    private AspectRatio(int value) {
+        this.value = value;
     }
 
-    private ReorderOp[] instructions;
-
-    public RefPicReordering(ReorderOp[] instructions) {
-        this.instructions = instructions;
+    public static AspectRatio fromValue(int value) {
+        if (value == Extended_SAR.value) {
+            return Extended_SAR;
+        }
+        return new AspectRatio(value);
     }
 
-    public ReorderOp[] getInstructions() {
-        return instructions;
+    public int getValue() {
+        return value;
     }
 }
