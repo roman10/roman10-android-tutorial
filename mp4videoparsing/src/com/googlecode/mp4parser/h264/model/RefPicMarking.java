@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -20,42 +20,51 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 */
 package com.googlecode.mp4parser.h264.model;
 
+
 /**
- * Contains reordering instructions for reference picture list
+ * A script of instructions applied to reference picture list
  *
  * @author Stanislav Vitvitskiy
  */
-public class RefPicReordering {
+public class RefPicMarking {
 
     public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
+        REMOVE_SHORT, REMOVE_LONG, CONVERT_INTO_LONG, TRUNK_LONG, CLEAR, MARK_LONG
+    }
 
-    public static class ReorderOp {
+    ;
+
+    public static class Instruction {
         private InstrType type;
-        private int param;
+        private int arg1;
+        private int arg2;
 
-        public ReorderOp(InstrType type, int param) {
+        public Instruction(InstrType type, int arg1, int arg2) {
             this.type = type;
-            this.param = param;
+            this.arg1 = arg1;
+            this.arg2 = arg2;
         }
 
         public InstrType getType() {
             return type;
         }
 
-        public int getParam() {
-            return param;
+        public int getArg1() {
+            return arg1;
+        }
+
+        public int getArg2() {
+            return arg2;
         }
     }
 
-    private ReorderOp[] instructions;
+    private Instruction[] instructions;
 
-    public RefPicReordering(ReorderOp[] instructions) {
+    public RefPicMarking(Instruction[] instructions) {
         this.instructions = instructions;
     }
 
-    public ReorderOp[] getInstructions() {
+    public Instruction[] getInstructions() {
         return instructions;
     }
 }

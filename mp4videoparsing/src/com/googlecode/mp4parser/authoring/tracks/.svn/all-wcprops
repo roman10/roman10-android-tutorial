@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/254/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/tracks
+END
+CroppedTrack.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/219/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/tracks/CroppedTrack.java
+END
+RawH264Track.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/254/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/tracks/RawH264Track.java
+END
+TextTrackImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/!svn/ver/234/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/tracks/TextTrackImpl.java
+END
+AppendTrack.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/224/trunk/isoparser/src/main/java/com/googlecode/mp4parser/authoring/tracks/AppendTrack.java
+END

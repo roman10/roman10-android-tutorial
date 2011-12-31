@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -18,44 +18,15 @@ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 OR OTHER DEALINGS IN THE SOFTWARE.
 */
-package com.googlecode.mp4parser.h264.model;
+package com.googlecode.mp4parser.h264;
+
+import com.coremedia.iso.IsoBufferWrapper;
+
+import java.io.IOException;
 
 /**
- * Contains reordering instructions for reference picture list
- *
  * @author Stanislav Vitvitskiy
  */
-public class RefPicReordering {
-
-    public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
-
-    public static class ReorderOp {
-        private InstrType type;
-        private int param;
-
-        public ReorderOp(InstrType type, int param) {
-            this.type = type;
-            this.param = param;
-        }
-
-        public InstrType getType() {
-            return type;
-        }
-
-        public int getParam() {
-            return param;
-        }
-    }
-
-    private ReorderOp[] instructions;
-
-    public RefPicReordering(ReorderOp[] instructions) {
-        this.instructions = instructions;
-    }
-
-    public ReorderOp[] getInstructions() {
-        return instructions;
-    }
+public interface AccessUnit {
+    IsoBufferWrapper nextNALUnit() throws IOException;
 }

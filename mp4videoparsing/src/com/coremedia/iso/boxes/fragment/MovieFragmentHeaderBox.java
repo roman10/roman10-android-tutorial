@@ -1,0 +1,71 @@
+/*
+ * Copyright 2009 castLabs GmbH, Berlin
+ *
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.coremedia.iso.boxes.fragment;
+
+import com.coremedia.iso.BoxParser;
+import com.coremedia.iso.IsoBufferWrapper;
+import com.coremedia.iso.IsoFile;
+import com.coremedia.iso.IsoOutputStream;
+import com.coremedia.iso.boxes.AbstractFullBox;
+import com.coremedia.iso.boxes.Box;
+
+import java.io.IOException;
+
+/**
+ * aligned(8) class MovieFragmentHeaderBox
+ * extends FullBox('mfhd', 0, 0){
+ * unsigned int(32) sequence_number;
+ * }
+ */
+
+public class MovieFragmentHeaderBox extends AbstractFullBox {
+    public static final String TYPE = "mfhd";
+    private long sequenceNumber;
+
+    public MovieFragmentHeaderBox() {
+        super(IsoFile.fourCCtoBytes(TYPE));
+    }
+
+    protected long getContentSize() {
+        return 4;
+    }
+
+    protected void getContent(IsoOutputStream os) throws IOException {
+        os.writeUInt32(sequenceNumber);
+    }
+
+    @Override
+    public void parse(IsoBufferWrapper in, long size, BoxParser boxParser, Box lastMovieFragmentBox) throws IOException {
+        super.parse(in, size, boxParser, lastMovieFragmentBox);
+        sequenceNumber = in.readUInt32();
+    }
+
+    public long getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(long sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "MovieFragmentHeaderBox{" +
+                "sequenceNumber=" + sequenceNumber +
+                '}';
+    }
+}

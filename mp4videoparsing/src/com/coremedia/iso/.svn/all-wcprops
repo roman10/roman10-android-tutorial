@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/258/trunk/isoparser/src/main/java/com/coremedia/iso
+END
+IsoFilter.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/2/trunk/isoparser/src/main/java/com/coremedia/iso/IsoFilter.java
+END
+BoxParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/258/trunk/isoparser/src/main/java/com/coremedia/iso/BoxParser.java
+END
+IsoFileConvenienceHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/178/trunk/isoparser/src/main/java/com/coremedia/iso/IsoFileConvenienceHelper.java
+END
+IsoBufferWrapperImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/234/trunk/isoparser/src/main/java/com/coremedia/iso/IsoBufferWrapperImpl.java
+END
+AbstractIsoBufferWrapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/243/trunk/isoparser/src/main/java/com/coremedia/iso/AbstractIsoBufferWrapper.java
+END
+MultiplexIsoBufferWrapperImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/234/trunk/isoparser/src/main/java/com/coremedia/iso/MultiplexIsoBufferWrapperImpl.java
+END
+Hex.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/218/trunk/isoparser/src/main/java/com/coremedia/iso/Hex.java
+END
+IsoBufferWrapper.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/243/trunk/isoparser/src/main/java/com/coremedia/iso/IsoBufferWrapper.java
+END
+Utf8.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/2/trunk/isoparser/src/main/java/com/coremedia/iso/Utf8.java
+END
+IsoOutputStream.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/!svn/ver/191/trunk/isoparser/src/main/java/com/coremedia/iso/IsoOutputStream.java
+END
+Ascii.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/2/trunk/isoparser/src/main/java/com/coremedia/iso/Ascii.java
+END
+AbstractBoxParser.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/AbstractBoxParser.java
+END
+RandomAccessFileIsoBufferWrapperImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/234/trunk/isoparser/src/main/java/com/coremedia/iso/RandomAccessFileIsoBufferWrapperImpl.java
+END
+IsoFile.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/198/trunk/isoparser/src/main/java/com/coremedia/iso/IsoFile.java
+END
+PropertyBoxParserImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/258/trunk/isoparser/src/main/java/com/coremedia/iso/PropertyBoxParserImpl.java
+END

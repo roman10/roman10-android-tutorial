@@ -1,0 +1,316 @@
+/*  
+ * Copyright 2008 CoreMedia AG, Hamburg
+ *
+ * Licensed under the Apache License, Version 2.0 (the License); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0 
+ * 
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an AS IS BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License. 
+ */
+
+package com.coremedia.iso.boxes.sampleentry;
+
+import com.coremedia.iso.BoxParser;
+import com.coremedia.iso.IsoBufferWrapper;
+import com.coremedia.iso.IsoOutputStream;
+import com.coremedia.iso.boxes.Box;
+
+import java.io.IOException;
+
+/**
+ * Entry type for timed text samples defined in the timed text specification (ISO/IEC 14496-17).
+ */
+public class TextSampleEntry extends SampleEntry {
+
+    public static final String TYPE1 = "tx3g";
+
+    public static final String TYPE_ENCRYPTED = "enct";
+
+/*  class TextSampleEntry() extends SampleEntry ('tx3g') {
+    unsigned int(32)  displayFlags;
+    signed int(8)     horizontal-justification;
+    signed int(8)     vertical-justification;
+    unsigned int(8)   background-color-rgba[4];
+    BoxRecord         default-text-box;
+    StyleRecord       default-style;
+    FontTableBox      font-table;
+  }
+  */
+
+    private long displayFlags; // 32 bits
+    private int horizontalJustification; // 8 bit
+    private int verticalJustification;  // 8 bit
+    private int[] backgroundColorRgba = new int[4]; // 4 bytes
+    private BoxRecord boxRecord = new BoxRecord();
+    private StyleRecord styleRecord = new StyleRecord();
+
+    public TextSampleEntry(byte[] type) {
+        super(type);
+    }
+
+
+    public void parse(IsoBufferWrapper in, long size, BoxParser boxParser, Box lastMovieFragmentBox) throws IOException {
+        super.parse(in, size, boxParser, lastMovieFragmentBox);
+        displayFlags = in.readUInt32();
+        horizontalJustification = in.readUInt8();
+        verticalJustification = in.readUInt8();
+        backgroundColorRgba = new int[4];
+        backgroundColorRgba[0] = in.readUInt8();
+        backgroundColorRgba[1] = in.readUInt8();
+        backgroundColorRgba[2] = in.readUInt8();
+        backgroundColorRgba[3] = in.readUInt8();
+        size -= 18;
+
+        boxRecord = new BoxRecord();
+        boxRecord.parse(in);
+        size -= boxRecord.getSize();
+
+        styleRecord = new StyleRecord();
+        styleRecord.parse(in);
+        size -= styleRecord.getSize();
+
+        while (size > 0) {
+            Box b = boxParser.parseBox(in, this, lastMovieFragmentBox);
+            boxes.add(b);
+            size -= b.getSize();
+        }
+    }
+
+    protected long getContentSize() {
+        long contentSize = 18;
+        contentSize += boxRecord.getSize();
+        contentSize += styleRecord.getSize();
+        for (Box boxe : boxes) {
+            contentSize += boxe.getSize();
+        }
+        return contentSize;
+    }
+
+    public String toString() {
+        return "TextSampleEntry";
+    }
+
+    protected void getContent(IsoOutputStream isos) throws IOException {
+        isos.write(new byte[6]);
+        isos.writeUInt16(getDataReferenceIndex());
+
+        isos.writeUInt32(displayFlags);
+        isos.writeUInt8(horizontalJustification);
+        isos.writeUInt8(verticalJustification);
+        isos.writeUInt8(backgroundColorRgba[0]);
+        isos.writeUInt8(backgroundColorRgba[1]);
+        isos.writeUInt8(backgroundColorRgba[2]);
+        isos.writeUInt8(backgroundColorRgba[3]);
+        boxRecord.getContent(isos);
+        styleRecord.getContent(isos);
+
+        for (Box boxe : boxes) {
+            boxe.getBox(isos);
+        }
+    }
+
+    public BoxRecord getBoxRecord() {
+        return boxRecord;
+    }
+
+    public void setBoxRecord(BoxRecord boxRecord) {
+        this.boxRecord = boxRecord;
+    }
+
+    public StyleRecord getStyleRecord() {
+        return styleRecord;
+    }
+
+    public void setStyleRecord(StyleRecord styleRecord) {
+        this.styleRecord = styleRecord;
+    }
+
+    public boolean isScrollIn() {
+        return (displayFlags & 0x00000020) == 0x00000020;
+    }
+
+    public void setScrollIn(boolean scrollIn) {
+        if (scrollIn) {
+            displayFlags |= 0x00000020;
+        } else {
+            displayFlags &= ~0x00000020;
+        }
+    }
+
+    public boolean isScrollOut() {
+        return (displayFlags & 0x00000040) == 0x00000040;
+    }
+
+    public void setScrollOut(boolean scrollOutIn) {
+        if (scrollOutIn) {
+            displayFlags |= 0x00000040;
+        } else {
+            displayFlags &= ~0x00000040;
+        }
+    }
+
+    public boolean isScrollDirection() {
+        return (displayFlags & 0x00000180) == 0x00000180;
+    }
+
+    public void setScrollDirection(boolean scrollOutIn) {
+        if (scrollOutIn) {
+            displayFlags |= 0x00000180;
+        } else {
+            displayFlags &= ~0x00000180;
+        }
+    }
+
+    public boolean isContinuousKaraoke() {
+        return (displayFlags & 0x00000800) == 0x00000800;
+    }
+
+    public void setContinuousKaraoke(boolean continuousKaraoke) {
+        if (continuousKaraoke) {
+            displayFlags |= 0x00000800;
+        } else {
+            displayFlags &= ~0x00000800;
+        }
+    }
+
+    public boolean isWriteTextVertically() {
+        return (displayFlags & 0x00020000) == 0x00020000;
+    }
+
+    public void setWriteTextVertically(boolean writeTextVertically) {
+        if (writeTextVertically) {
+            displayFlags |= 0x00020000;
+        } else {
+            displayFlags &= ~0x00020000;
+        }
+    }
+
+
+    public boolean isFillTextRegion() {
+        return (displayFlags & 0x00040000) == 0x00040000;
+    }
+
+    public void setFillTextRegion(boolean fillTextRegion) {
+        if (fillTextRegion) {
+            displayFlags |= 0x00040000;
+        } else {
+            displayFlags &= ~0x00040000;
+        }
+    }
+
+
+    public int getHorizontalJustification() {
+        return horizontalJustification;
+    }
+
+    public void setHorizontalJustification(int horizontalJustification) {
+        this.horizontalJustification = horizontalJustification;
+    }
+
+    public int getVerticalJustification() {
+        return verticalJustification;
+    }
+
+    public void setVerticalJustification(int verticalJustification) {
+        this.verticalJustification = verticalJustification;
+    }
+
+    public int[] getBackgroundColorRgba() {
+        return backgroundColorRgba;
+    }
+
+    public void setBackgroundColorRgba(int[] backgroundColorRgba) {
+        this.backgroundColorRgba = backgroundColorRgba;
+    }
+
+    public static class BoxRecord {
+        int top;
+        int left;
+        int bottom;
+        int right;
+
+        public void parse(IsoBufferWrapper in) throws IOException {
+            top = in.readUInt16();
+            left = in.readUInt16();
+            bottom = in.readUInt16();
+            right = in.readUInt16();
+        }
+
+        public void getContent(IsoOutputStream isos) throws IOException {
+            isos.writeUInt16(top);
+            isos.writeUInt16(left);
+            isos.writeUInt16(bottom);
+            isos.writeUInt16(right);
+        }
+
+        public int getSize() {
+            return 8;
+        }
+    }
+
+    /*
+    class FontRecord {
+	unsigned int(16) 	font-ID;
+	unsigned int(8)	font-name-length;
+	unsigned int(8)	font[font-name-length];
+}
+     */
+
+
+    /*
+   aligned(8) class StyleRecord {
+   unsigned int(16) 	startChar;
+   unsigned int(16)	endChar;
+   unsigned int(16)	font-ID;
+   unsigned int(8)	face-style-flags;
+   unsigned int(8)	font-size;
+   unsigned int(8)	text-color-rgba[4];
+}
+    */
+    public static class StyleRecord {
+        int startChar;
+        int endChar;
+        int fontId;
+        int faceStyleFlags;
+        int fontSize;
+        int[] textColor = new int[]{0xff, 0xff, 0xff, 0xff};
+
+        public void parse(IsoBufferWrapper in) throws IOException {
+            startChar = in.readUInt16();
+            endChar = in.readUInt16();
+            fontId = in.readUInt16();
+            faceStyleFlags = in.readUInt8();
+            fontSize = in.readUInt8();
+            textColor = new int[4];
+            textColor[0] = in.readUInt8();
+            textColor[1] = in.readUInt8();
+            textColor[2] = in.readUInt8();
+            textColor[3] = in.readUInt8();
+        }
+
+
+        public void getContent(IsoOutputStream isos) throws IOException {
+            isos.writeUInt16(startChar);
+            isos.writeUInt16(endChar);
+            isos.writeUInt16(fontId);
+            isos.writeUInt8(faceStyleFlags);
+            isos.writeUInt8(fontSize);
+            isos.writeUInt8(textColor[0]);
+            isos.writeUInt8(textColor[1]);
+            isos.writeUInt8(textColor[2]);
+            isos.writeUInt8(textColor[3]);
+        }
+
+        public int getSize() {
+            return 12;
+        }
+    }
+
+
+}

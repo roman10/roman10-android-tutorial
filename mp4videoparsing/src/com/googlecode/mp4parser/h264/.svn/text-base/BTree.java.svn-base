@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -18,44 +18,52 @@ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 OR OTHER DEALINGS IN THE SOFTWARE.
 */
-package com.googlecode.mp4parser.h264.model;
+package com.googlecode.mp4parser.h264;
+
 
 /**
- * Contains reordering instructions for reference picture list
+ * Simple BTree implementation needed for haffman tables
  *
  * @author Stanislav Vitvitskiy
  */
-public class RefPicReordering {
+public class BTree {
+    private BTree zero;
+    private BTree one;
+    private Object value;
 
-    public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
-
-    public static class ReorderOp {
-        private InstrType type;
-        private int param;
-
-        public ReorderOp(InstrType type, int param) {
-            this.type = type;
-            this.param = param;
+    /**
+     * Adds a leaf value to a binary path specified by path
+     *
+     * @param str
+     * @param value
+     */
+    public void addString(String path, Object value) {
+        if (path.length() == 0) {
+            this.value = value;
+            return;
         }
-
-        public InstrType getType() {
-            return type;
+        char charAt = path.charAt(0);
+        BTree branch;
+        if (charAt == '0') {
+            if (zero == null)
+                zero = new BTree();
+            branch = zero;
+        } else {
+            if (one == null)
+                one = new BTree();
+            branch = one;
         }
-
-        public int getParam() {
-            return param;
-        }
+        branch.addString(path.substring(1), value);
     }
 
-    private ReorderOp[] instructions;
-
-    public RefPicReordering(ReorderOp[] instructions) {
-        this.instructions = instructions;
+    public BTree down(int b) {
+        if (b == 0)
+            return zero;
+        else
+            return one;
     }
 
-    public ReorderOp[] getInstructions() {
-        return instructions;
+    public Object getValue() {
+        return value;
     }
 }

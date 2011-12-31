@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -20,42 +20,45 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 */
 package com.googlecode.mp4parser.h264.model;
 
+import com.coremedia.iso.IsoBufferWrapper;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
- * Contains reordering instructions for reference picture list
+ * Network abstraction layer (NAL) unit
  *
  * @author Stanislav Vitvitskiy
  */
-public class RefPicReordering {
+public class NALUnit {
 
-    public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
+    public NALUnitType type;
+    public int nal_ref_idc;
 
-    public static class ReorderOp {
-        private InstrType type;
-        private int param;
-
-        public ReorderOp(InstrType type, int param) {
-            this.type = type;
-            this.param = param;
-        }
-
-        public InstrType getType() {
-            return type;
-        }
-
-        public int getParam() {
-            return param;
-        }
+    public NALUnit(NALUnitType type, int nal_ref_idc) {
+        this.type = type;
+        this.nal_ref_idc = nal_ref_idc;
     }
 
-    private ReorderOp[] instructions;
+    public static NALUnit read(IsoBufferWrapper is) throws IOException {
+        int nalu = is.read();
+        int nal_ref_idc = (nalu >> 5) & 0x3;
+        int nb = nalu & 0x1f;
 
-    public RefPicReordering(ReorderOp[] instructions) {
-        this.instructions = instructions;
+        NALUnitType type = NALUnitType.fromValue(nb);
+        return new NALUnit(type, nal_ref_idc);
     }
 
-    public ReorderOp[] getInstructions() {
-        return instructions;
+    public void write(OutputStream out) throws IOException {
+        int nalu = type.getValue() | (nal_ref_idc << 5);
+        out.write(nalu);
+    }
+
+    @Override
+    public String toString() {
+        return "NALUnit{" +
+                "type=" + type +
+                ", nal_ref_idc=" + nal_ref_idc +
+                '}';
     }
 }

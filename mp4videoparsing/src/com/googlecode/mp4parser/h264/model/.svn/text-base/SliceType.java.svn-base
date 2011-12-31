@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -20,42 +20,45 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 */
 package com.googlecode.mp4parser.h264.model;
 
-/**
- * Contains reordering instructions for reference picture list
- *
- * @author Stanislav Vitvitskiy
- */
-public class RefPicReordering {
+public class SliceType {
+    private String type;
+    private int value;
 
-    public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
+    public static SliceType P = new SliceType("P", 0);
+    public static SliceType B = new SliceType("B", 1);
+    public static SliceType I = new SliceType("I", 2);
+    public static SliceType SP = new SliceType("SP", 3);
+    public static SliceType SI = new SliceType("SI", 4);
 
-    public static class ReorderOp {
-        private InstrType type;
-        private int param;
-
-        public ReorderOp(InstrType type, int param) {
-            this.type = type;
-            this.param = param;
-        }
-
-        public InstrType getType() {
-            return type;
-        }
-
-        public int getParam() {
-            return param;
-        }
+    private SliceType(String type, int value) {
+        this.type = type;
+        this.value = value;
     }
 
-    private ReorderOp[] instructions;
-
-    public RefPicReordering(ReorderOp[] instructions) {
-        this.instructions = instructions;
+    public int getValue() {
+        return value;
     }
 
-    public ReorderOp[] getInstructions() {
-        return instructions;
+    public static SliceType fromValue(int real) {
+        if (real == P.value) {
+            return P;
+        } else if (real == B.value) {
+            return B;
+        } else if (real == I.value) {
+            return I;
+        } else if (real == SP.value) {
+            return SP;
+        } else if (real == SI.value) {
+            return SI;
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "SliceType{" +
+                "type='" + type + '\'' +
+                ", value=" + value +
+                '}';
     }
 }

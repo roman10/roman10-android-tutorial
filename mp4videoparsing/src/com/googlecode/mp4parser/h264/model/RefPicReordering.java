@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -29,7 +29,9 @@ public class RefPicReordering {
 
     public static enum InstrType {
         FORWARD, BACKWARD, LONG_TERM
-    };
+    }
+
+    ;
 
     public static class ReorderOp {
         private InstrType type;

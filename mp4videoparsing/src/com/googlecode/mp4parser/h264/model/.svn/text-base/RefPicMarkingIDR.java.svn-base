@@ -1,4 +1,4 @@
-/**
+/*
 Copyright (c) 2011 Stanislav Vitvitskiy
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -21,41 +21,32 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 package com.googlecode.mp4parser.h264.model;
 
 /**
- * Contains reordering instructions for reference picture list
+ * Reference picture marking used for IDR frames
  *
  * @author Stanislav Vitvitskiy
  */
-public class RefPicReordering {
+public class RefPicMarkingIDR {
+    boolean discardDecodedPics;
+    boolean useForlongTerm;
 
-    public static enum InstrType {
-        FORWARD, BACKWARD, LONG_TERM
-    };
-
-    public static class ReorderOp {
-        private InstrType type;
-        private int param;
-
-        public ReorderOp(InstrType type, int param) {
-            this.type = type;
-            this.param = param;
-        }
-
-        public InstrType getType() {
-            return type;
-        }
-
-        public int getParam() {
-            return param;
-        }
+    public RefPicMarkingIDR(boolean discardDecodedPics, boolean useForlongTerm) {
+        this.discardDecodedPics = discardDecodedPics;
+        this.useForlongTerm = useForlongTerm;
     }
 
-    private ReorderOp[] instructions;
-
-    public RefPicReordering(ReorderOp[] instructions) {
-        this.instructions = instructions;
+    public boolean isDiscardDecodedPics() {
+        return discardDecodedPics;
     }
 
-    public ReorderOp[] getInstructions() {
-        return instructions;
+    public boolean isUseForlongTerm() {
+        return useForlongTerm;
+    }
+
+    @Override
+    public String toString() {
+        return "RefPicMarkingIDR{" +
+                "discardDecodedPics=" + discardDecodedPics +
+                ", useForlongTerm=" + useForlongTerm +
+                '}';
     }
 }
