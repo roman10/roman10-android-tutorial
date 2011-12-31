@@ -107,10 +107,10 @@ public class UploadService extends Service {
 		try {
 			httpClient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
 			httpClient.getParams().setParameter("http.socket.timeout", new Integer(90000)); // 90 second 
-			HttpPost httpPost = new HttpPost("http://127.0.0.1/receive.php");
+			HttpPost httpPost = new HttpPost("http://172.26.190.224/receive.php");
 			SimpleMultipartEntity mpEntity = new SimpleMultipartEntity();
 			File vFile = new File(pFileFullPathName);
-		    mpEntity.addPart("myfile", pFileFullPathName.substring(pFileFullPathName.lastIndexOf("/")+1), new FileInputStream(vFile), "video/" + pFileFullPathName.substring(pFileFullPathName.lastIndexOf(".") + 1));
+		    mpEntity.addPart("myfile", pFileFullPathName.substring(pFileFullPathName.lastIndexOf("/")+1), new FileInputStream(vFile), "text/plain");
 			
 			httpPost.setEntity(mpEntity);
 			HttpResponse lResponse = httpClient.execute(httpPost);
