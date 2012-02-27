@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">SpriteMethodTest</string>
+<string name="dialog_ok">OK</string>
+<string name="dialog_title">Profile Results</string>
+<string name="SpriteTitle">Sprites:</string>
+<string name="AnimateTitle">Animate</string>
+<string name="CanvasTitle">Canvas</string>
+<string name="OpenGLTitle">OpenGL ES</string>
+<string name="UseVertsTitle">Use Basic Vert Quads</string>
+<string name="UseDrawTextureTitle">Use Draw Texture Extension</string>
+<string name="UseVBOTitle">Use VBO Extension</string>
+<string name="UseView">Extends View</string>
+<string name="UseSurface">Use SurfaceView and Renderer</string>
+<string name="RunTestTitle">Run Test</string>
+</resources>

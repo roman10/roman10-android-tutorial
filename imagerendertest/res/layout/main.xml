@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+	android:id="@+id/widget39"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	>
+	
+	<CheckBox android:id="@+id/methodCanvas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/CanvasTitle">
+	</CheckBox>
+	
+	<RadioGroup
+	    android:paddingLeft = "50px" 
+	    android:id="@+id/canvasSettings">
+		<RadioGroup>
+		    
+		</RadioGroup>
+		<RadioButton android:id="@+id/settingView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/UseView"></RadioButton>
+		<RadioButton android:id="@+id/settingSurface" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/UseSurface"></RadioButton>
+	</RadioGroup>
+	
+	<CheckBox android:id="@+id/methodOpenGL" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/OpenGLTitle">
+	</CheckBox>
+	
+	
+	<RadioGroup
+		android:paddingLeft = "50px"
+		android:id="@+id/GLSettings">
+			<RadioButton android:id="@+id/settingVerts" android:layout_width="wrap_content" android:text="@string/UseVertsTitle" android:layout_height="wrap_content"></RadioButton>
+			<RadioButton android:id="@+id/settingDrawTexture" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/UseDrawTextureTitle"></RadioButton>
+			<RadioButton android:id="@+id/settingVBO" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/UseVBOTitle"></RadioButton>
+	</RadioGroup>
+
+	<Button
+	android:id="@+id/runTest"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="@string/RunTestTitle"
+	>
+	</Button>
+
+</TableLayout>
