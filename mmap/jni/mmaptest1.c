@@ -1,3 +1,6 @@
+/***
+this code doesn't work yet!!!
+**/
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -21,14 +24,9 @@ int fd;
 
 int shareMemMap() {
     //create anaymous map, not backed by any files
-    if ((fd = shm_open(shareMemName, O_RDWR|O_CREAT, 0)) == -1) {        
+    if ((fd = ashmem_create_region(shareMemName, mapSize)) == -1) {        
         perror("open: ");
         LOGI(10, "error open the file: %d", errno);
-        exit(1);
-    }
-    if (ftruncate(fd, mapSize) == -1) {
-	    perror("ftruncate: ");
-        LOGI(10, "error truncate the file: %d", errno);
         exit(1);
     }
     maped = mmap(0, mapSize, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
