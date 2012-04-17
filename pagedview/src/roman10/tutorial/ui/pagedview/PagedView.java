@@ -149,7 +149,93 @@ public class PagedView extends ViewGroup {
             setupView(child, i);
         }
 	}
+	//Implement this method to intercept all touch screen motion events.
+	//	Using this function takes some care, as it has a fairly complicated interaction with View.onTouchEvent(MotionEvent), and using it requires implementing that method as well as this one in the correct way. Events will be received in the following order:
+	//	You will receive the down event here.
+	//	The down event will be handled either by a child of this view group, or given to your own onTouchEvent() method to handle; this means you should implement onTouchEvent() to return true, so you will continue to see the rest of the gesture (instead of looking for a parent view to handle it). Also, by returning true from onTouchEvent(), you will not receive any following events in onInterceptTouchEvent() and all touch processing must happen in onTouchEvent() like normal.
+	//	For as long as you return false from this function, each following event (up to and including the final up) will be delivered first here and then to the target's onTouchEvent().
+	//	If you return true from here, you will not receive any following events: the target view will receive the same event but with the action ACTION_CANCEL, and all further events will be delivered to your onTouchEvent() method and no longer appear here.
+	//  Return true to steal motion events from the children and have them dispatched to this ViewGroup through onTouchEvent(). The current target will receive an ACTION_CANCEL event, and no further messages will be delivered here.
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+    	 /*
+         * Shortcut the most recurring case: the user is in the dragging state
+         * and he is moving his finger. We want to intercept this motion.
+         */
+    	final int action = ev.getAction();
+    	if (action == MotionEvent.ACTION_MOVE && mIsBeingDragged) {
+    		return true;
+    	}
+    	final int x = (int) ev.getX();
+    	switch (action) {
+    		case MotionEvent.ACTION_DOWN:
+    			mStartMotionX = x;
+    			 /*
+                 * If currently scrolling and user touches the screen, initiate
+                 * drag; otherwise don't. mScroller.isFinished should be false
+                 * when being flinged.
+                 */
+    			mIsBeingDragged = !mScroller.isFinished();
+    			if (mIsBeingDragged) {
+    				mScroller.forceFinished(true);
+    				mHandler.removeCallbacks(mScrollerRunnable);
+    			}
+    			break;
+    		case MotionEvent.ACTION_MOVE:
+    			/*
+                 * mIsBeingDragged == false, otherwise the shortcut would have
+                 * caught it. Check whether the user has moved far enough from
+                 * his original down touch.
+                 */
+    			final int xDiff = (int) Math.abs(x - mStartMotionX);
+    			if (xDiff > mPagingTouchSlop) {
+    				mIsBeingDragged = true;
+    				performStartTracking(x);
+    			}
+    			break;
+    		case MotionEvent.ACTION_CANCEL:
+    		case MotionEvent.ACTION_UP:
+    			//release the drag
+    			mIsBeingDragged = false;
+    			break;
+    	}
+    	/*
+         * Motion events are only intercepted during dragging mode.
+         */
+    	return mIsBeingDragged;
+    }
+    
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+    	final int action = ev.getAction();
+    	final int x = (int) ev.getX();
+    	if (mVelocityTracker == null) {
+    		mVelocityTracker = VelocityTracker.obtain();
+    	}
+    	mVelocityTracker.addMovement(ev);
+    	switch (action) {
+    		case MotionEvent.ACTION_DOWN:
+    			if (!mScroller.isFinished()) {
+    				mScroller.forceFinished(true);
+    				mHandler.removeCallbacks(mScrollerRunnable);
+    			}
+    			performStartTracking(x);
+    			break;
+    		case MotionEvent.ACTION_MOVE:
+    			//scroll to follow the motion event
+    			final int newOffset = mStartOffsetX - (mStartMotionX - x);
+    			if (newOffset > 0 || newOffset < getOffsetForPage(mPageCount - 1)) {
+    				mStartOffsetX = mOffsetX;
+    				mStartMotionX = x;
+    			} else {
+    				setOffsetX(newOffset);
+    			}
+    			break;
+    		case MotionEvent.ACTION_UP:
+    		case MotionEvent.ACTION_CANCEL:
+    			
+    			break;
+    	}
+    	return true;
     }
 }

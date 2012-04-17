@@ -24,12 +24,12 @@ int fd;
 
 int shareMemMap() {
     //create anaymous map, not backed by any files
-    if ((fd = ashmem_create_region(shareMemName, mapSize)) == -1) {        
+/*    if ((fd = ashmem_create_region(shareMemName, mapSize)) == -1) {        
         perror("open: ");
         LOGI(10, "error open the file: %d", errno);
         exit(1);
-    }
-    maped = mmap(0, mapSize, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+    }*/
+    maped = mmap(0, mapSize, PROT_READ|PROT_WRITE, MAP_ANON|MAP_SHARED, fd, 0);
     if (maped == MAP_FAILED || maped == NULL) {
         perror("map error: ");
         return -1;
@@ -42,7 +42,7 @@ int shareMemMap() {
 void unmapSharedMem() {
     munmap(maped, mapSize);
     close(fd);
-    shm_unlink(shareMemName);
+//    shm_unlink(shareMemName);
 }
 
 JNIEXPORT void JNICALL Java_roman10_tutorial_mmap_UpdateMemoryService_naUnmap(JNIEnv *pEnv, jobject pObj) {
@@ -71,6 +71,10 @@ JNIEXPORT void JNICALL Java_roman10_tutorial_mmap_UpdateMemoryService_naUpdate(J
 	    maped[i] = x;
     }
     //readFile();
+}
+
+JNIEXPORT jobject JNICALL Java_roman10_tutorial_mmap_Mmap_naUnmap(JNIEnv *pEnv, jobject pObj) {
+    unmapSharedMem();
 }
 
 JNIEXPORT jobject JNICALL Java_roman10_tutorial_mmap_Mmap_naMap(JNIEnv *pEnv, jobject pObj) {
