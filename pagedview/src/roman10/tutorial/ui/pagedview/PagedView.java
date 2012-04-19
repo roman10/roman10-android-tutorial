@@ -37,7 +37,7 @@ import android.widget.Scroller;
 
 public class PagedView extends ViewGroup {
     private static final String TAG = PagedView.class.getSimpleName();
-    public interface OnPageViewChangeListener {
+    public interface OnPagedViewChangeListener {
         void onPageChanged(PagedView pagedView, int previousPage, int newPage);
         void onStartTracking(PagedView pagedView);
         void onStopTracking(PagedView pagedView); 
@@ -45,8 +45,8 @@ public class PagedView extends ViewGroup {
     private static final int INVALID_PAGE = -1;
     private static final int MINIMUM_PAGE_CHANGE_VELOCITY = 500;
     private static final int VELOCITY_UNITS = 1000;
-    //1000/60 = 16
-    private static final int FRAME_RATE = 16;
+    //private static final int FRAME_RATE = 60;
+    private static final int FRAME_INT = 16;
     
     private final Handler mHandler = new Handler();
     private int mPageCount;
@@ -131,6 +131,7 @@ public class PagedView extends ViewGroup {
         //Make sure the offset adapts itself to mCurrentPage
         mOffsetX = getOffsetForPage(mCurrentPage);
     }
+    //Called from layout when this view should assign a size and position to each of its children.
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
         if (mPageCount <= 0) {
@@ -233,9 +234,355 @@ public class PagedView extends ViewGroup {
     			break;
     		case MotionEvent.ACTION_UP:
     		case MotionEvent.ACTION_CANCEL:
-    			
-    			break;
+    			setOffsetX(mStartOffsetX - (mStartMotionX - x));
+    			int direction = 0;
+
+                final int slop = mStartMotionX - x;
+                if (Math.abs(slop) > mPageSlop) {
+                    direction = (slop > 0) ? 1 : -1;
+                } else {
+                    mVelocityTracker.computeCurrentVelocity(VELOCITY_UNITS, mMaximumVelocity);
+                    final int initialVelocity = (int) mVelocityTracker.getXVelocity();
+                    if (Math.abs(initialVelocity) > mMinimumVelocity) {
+                        direction = (initialVelocity > 0) ? -1 : 1;
+                    }
+                }
+
+                if (mOnPageChangeListener != null) {
+                    mOnPageChangeListener.onStopTracking(this);
+                }
+
+                smoothScrollToPage(getActualCurrentPage() + direction);
+
+                if (mVelocityTracker != null) {
+                    mVelocityTracker.recycle();
+                    mVelocityTracker = null;
+                }
+
+                break;
     	}
     	return true;
     }
+    /**
+     * Set a listener to be notified of changes that may occur in this
+     * {@link PagedView}.
+     * 
+     * @param listener The listener to callback.
+     */
+    public void setOnPageChangeListener(OnPagedViewChangeListener listener) {
+        mOnPageChangeListener = listener;
+    }
+
+    /**
+     * Sets the {@link PagedAdapter} used to fill this {@link PagedView} with
+     * some basic information : the number of displayed pages, the pages, etc.
+     * 
+     * @param adapter The {@link PagedAdapter} to set to this {@link PagedView}
+     */
+    public void setAdapter(PagedAdapter adapter) {
+
+        if (null != mAdapter) {
+            mAdapter.unregisterDataSetObserver(mDataSetObserver);
+        }
+
+        // Reset
+        mRecycler.clear();
+        mActiveViews.clear();
+        removeAllViews();
+
+        mAdapter = adapter;
+
+        mTargetPage = INVALID_PAGE;
+        mCurrentPage = 0;
+        mOffsetX = 0;
+
+        if (null != mAdapter) {
+            mAdapter.registerDataSetObserver(mDataSetObserver);
+            mPageCount = mAdapter.getCount();
+        }
+
+        //Call this when something has changed which has invalidated the layout of this view. 
+        //This will schedule a layout pass of the view tree.
+        requestLayout();
+        invalidate();
+    }
+
+    /**
+     * Returns the current page.
+     * 
+     * @return The current page
+     */
+    public int getCurrentPage() {
+        return mCurrentPage;
+    }
+
+    private int getActualCurrentPage() {
+        return mTargetPage != INVALID_PAGE ? mTargetPage : mCurrentPage;
+    }
+
+    /**
+     * Initiate an animated scrolling from the current position to the given
+     * page
+     * 
+     * @param page The page to scroll to.
+     */
+    public void smoothScrollToPage(int page) {
+        scrollToPage(page, true);
+    }
+
+    /**
+     * Initiate an animated scrolling to the next page
+     */
+    public void smoothScrollToNext() {
+        smoothScrollToPage(getActualCurrentPage() + 1);
+    }
+
+    /**
+     * Initiate an animated scrolling to the previous page
+     */
+    public void smoothScrollToPrevious() {
+        smoothScrollToPage(getActualCurrentPage() - 1);
+    }
+
+    /**
+     * Instantly moves the PagedView from the current position to the given
+     * page.
+     * 
+     * @param page The page to scroll to.
+     */
+    public void scrollToPage(int page) {
+        scrollToPage(page, false);
+    }
+
+    /**
+     * Instantly moves to the next page
+     */
+    public void scrollToNext() {
+        scrollToPage(getActualCurrentPage() + 1);
+    }
+
+    /**
+     * Instantly moves to the previous page
+     */
+    public void scrollToPrevious() {
+        scrollToPage(getActualCurrentPage() - 1);
+    }
+
+    private void scrollToPage(int page, boolean animated) {
+
+        // Make sure page is bound to correct values
+        page = Math.max(0, Math.min(page, mPageCount - 1));
+
+        final int targetOffset = getOffsetForPage(page);
+
+        final int dx = targetOffset - mOffsetX;
+        if (dx == 0) {
+            performPageChange(page);
+            return;
+        }
+
+        if (animated) {
+            mTargetPage = page;
+            mScroller.startScroll(mOffsetX, 0, dx, 0);
+            mHandler.post(mScrollerRunnable);
+        } else {
+            setOffsetX(targetOffset);
+            performPageChange(page);
+        }
+    }
+
+    private void setOffsetX(int offsetX) {
+
+        if (offsetX == mOffsetX) {
+            return;
+        }
+
+        final int startPage = getPageForOffset(offsetX);
+        final int endPage = getPageForOffset(offsetX - getWidth() + 1);
+
+        recycleViews(startPage, endPage);
+
+        final int leftAndRightOffset = offsetX - mOffsetX;
+        for (int i = startPage; i <= endPage; i++) {
+
+            View child = mActiveViews.get(i);
+            if (child == null) {
+                child = obtainView(i);
+                setupView(child, i);
+            }
+
+            child.offsetLeftAndRight(leftAndRightOffset);
+        }
+
+        mOffsetX = offsetX;
+        invalidate();	//Invalidate the whole view.
+    }
+
+    private int getOffsetForPage(int page) {
+        return -(page * getWidth());
+    }
+
+    private int getPageForOffset(int offset) {
+        return -offset / getWidth();
+    }
+
+    private void recycleViews(int start, int end) {
+        // [start, end] <=> range of pages that needs to be displayed
+        final SparseArray<View> activeViews = mActiveViews;
+
+        final int count = activeViews.size();
+        for (int i = 0; i < count; i++) {
+            final int key = activeViews.keyAt(i);
+            if (key < start || key > end) {
+                final View recycled = activeViews.valueAt(i);
+                removeView(recycled);
+                mRecycler.add(recycled);
+
+                activeViews.delete(key);
+            }
+        }
+    }
+
+    private View obtainView(int position) {
+        // Get a view from the recycler
+        final View recycled = mRecycler.poll();
+
+        View child = mAdapter.getView(position, recycled, this);
+
+        if (child == null) {
+            throw new NullPointerException("PagedAdapter.getView must return a non-null View");
+        }
+        if (recycled != null && child != recycled) {
+//            if (Config.GD_WARNING_LOGS_ENABLED) {
+//                Log.w(LOG_TAG, "Not reusing the convertView may impact PagedView performance.");
+//            }
+        	Log.w(TAG, "Not reusing the convertView may impact PagedView performance.");
+        }
+
+        addView(child);
+        mActiveViews.put(position, child);
+
+        return child;
+    }
+
+    private void setupView(View child, int position) {
+
+        if (child == null) {
+            return;
+        }
+
+        LayoutParams lp = child.getLayoutParams();
+        if (lp == null) {
+            lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        }
+
+        // Measure the view
+        final int childWidthSpec = getChildMeasureSpec(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.EXACTLY), 0, lp.width);
+        final int childHeightSpec = getChildMeasureSpec(MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.EXACTLY), 0, lp.height);
+        child.measure(childWidthSpec, childHeightSpec);
+
+        // Layout the view
+        final int childLeft = mOffsetX - getOffsetForPage(position);
+        child.layout(childLeft, 0, childLeft + child.getMeasuredWidth(), child.getMeasuredHeight());
+    }
+
+    private void performStartTracking(int startMotionX) {
+        if (mOnPageChangeListener != null) {
+            mOnPageChangeListener.onStartTracking(this);
+        }
+        mStartMotionX = startMotionX;
+        mStartOffsetX = mOffsetX;
+    }
+
+    private void performPageChange(int newPage) {
+        if (mCurrentPage != newPage) {
+            if (mOnPageChangeListener != null) {
+                mOnPageChangeListener.onPageChanged(this, mCurrentPage, newPage);
+            }
+            mCurrentPage = newPage;
+        }
+    }
+
+    static class SavedState extends BaseSavedState {
+
+        int currentPage;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            currentPage = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(currentPage);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+    }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState ss = new SavedState(superState);
+
+        ss.currentPage = mCurrentPage;
+
+        return ss;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+
+        mCurrentPage = ss.currentPage;
+    }
+
+    //Receives call backs when a data set has been changed, or made invalid. 
+    //DataSetObserver must be implemented by objects which are added to a DataSetObservable.
+    private DataSetObserver mDataSetObserver = new DataSetObserver() {
+
+        public void onInvalidated() {
+            // Not handled
+        };
+
+        public void onChanged() {
+            // TODO Cyril : When data has changed we should normally
+            // look for the position that as the same id in case
+            // Adapter.hasStableIds() returns true.
+            final int currentPage = mCurrentPage;
+            setAdapter(mAdapter);
+            mCurrentPage = currentPage;
+            setOffsetX(getOffsetForPage(currentPage));
+        };
+
+    };
+
+    private Runnable mScrollerRunnable = new Runnable() {
+//        @Override
+        public void run() {
+            final Scroller scroller = mScroller;
+            if (!scroller.isFinished()) {
+                scroller.computeScrollOffset();
+                setOffsetX(scroller.getCurrX());
+                mHandler.postDelayed(this, FRAME_INT);
+            } else {
+                performPageChange(mTargetPage);
+            }
+        }
+    };
+
 }
