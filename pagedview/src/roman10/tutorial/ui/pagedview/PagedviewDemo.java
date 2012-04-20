@@ -20,7 +20,13 @@ public class PagedviewDemo extends Activity {
         setContentView(R.layout.main);
         final FrameLayout contentView = (FrameLayout) this.findViewById(R.id.content_view);
         LayoutInflater.from(this).inflate(R.layout.paged_view, contentView);
+        
+        final PagedView pagedView = (PagedView)findViewById(R.id.paged_view);
+        pagedView.setOnPageChangeListener(mOnPagedViewChangedListener);
+        mAdapter = new PhotoSwipeAdapter(this.getApplicationContext(), PAGE_COUNT);
+        pagedView.setAdapter(mAdapter);
     }
+    
     private OnPagedViewChangeListener mOnPagedViewChangedListener = new OnPagedViewChangeListener() {
 
 //      @Override
