@@ -3,11 +3,23 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <FrameLayout
-		android:id="@+id/content_view"
-		android:layout_height="0dp"
+    
+	<Button
+		android:id="@+id/demo1"
+		android:text="Demo 1"
 		android:layout_width="fill_parent"
-		android:layout_weight="1" />
-
+		android:layout_height="wrap_content"
+		></Button>
+	<Button
+		android:id="@+id/demo2"
+		android:text="Demo 2"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		></Button>
+	<Button
+		android:id="@+id/demo3"
+		android:text="Demo 3"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		></Button>
 </LinearLayout>

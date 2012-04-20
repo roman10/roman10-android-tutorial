@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-public class PagedviewDemo extends Activity {
+public class PagedViewDemo extends Activity {
 	private static final int PAGE_COUNT = 10;
     private static final int PAGE_MAX_INDEX = PAGE_COUNT;
     
@@ -19,9 +19,9 @@ public class PagedviewDemo extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.paged_view_frame);
         final FrameLayout contentView = (FrameLayout) this.findViewById(R.id.content_view);
-        LayoutInflater.from(this).inflate(R.layout.paged_view, contentView);
+        LayoutInflater.from(this).inflate(R.layout.paged_view_demo, contentView);
         
         final PagedView pagedView = (PagedView)findViewById(R.id.paged_view);
         pagedView.setOnPageChangeListener(mOnPagedViewChangedListener);
