@@ -10,9 +10,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 public class PagedviewDemo extends Activity {
-	private static final int PAGE_COUNT = 100;
-    private static final int PAGE_MAX_INDEX = PAGE_COUNT - 1;
+	private static final int PAGE_COUNT = 10;
+    private static final int PAGE_MAX_INDEX = PAGE_COUNT;
+    
     private PhotoSwipeAdapter mAdapter;
+    private PageIndicator mPageIndicator;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,14 @@ public class PagedviewDemo extends Activity {
         pagedView.setOnPageChangeListener(mOnPagedViewChangedListener);
         mAdapter = new PhotoSwipeAdapter(this.getApplicationContext(), PAGE_COUNT);
         pagedView.setAdapter(mAdapter);
+        
+        mPageIndicator = (PageIndicator)findViewById(R.id.page_indicator);
+        mPageIndicator.setDotCount(PAGE_MAX_INDEX);
+        setActivePage(pagedView.getCurrentPage());
+    }
+    
+    private void setActivePage(int page) {
+    	mPageIndicator.setActiveDot(page);
     }
     
     private OnPagedViewChangeListener mOnPagedViewChangedListener = new OnPagedViewChangeListener() {
@@ -40,6 +50,7 @@ public class PagedviewDemo extends Activity {
 //      @Override
       public void onPageChanged(PagedView pagedView, int previousPage, int newPage) {
 //          setActivePage(newPage);
+    	  setActivePage(newPage);
       }
   };
 }
