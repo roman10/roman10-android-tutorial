@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 				} else if (PcmAudioRecorder.State.ERROR == mRecorder.getState()) {
 					mRecorder.release();
 					mRecorder = PcmAudioRecorder.getInstanse();
-					mRecorder.setOutputFile("/sdcard/testpcm.pcm");
+					mRecorder.setOutputFile(mRcordFilePath);
 					btnControl.setText("Start");
 				} else {
 					mRecorder.stop();

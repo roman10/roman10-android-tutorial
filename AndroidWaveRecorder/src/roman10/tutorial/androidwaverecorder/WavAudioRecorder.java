@@ -44,9 +44,6 @@ public class WavAudioRecorder {
 	// Recorder used for uncompressed recording
 	private AudioRecord     audioRecorder = null;
 	
-	// Stores current amplitude (only in uncompressed mode)
-	private int             cAmplitude = 0;
-	
 	// Output file path
 	private String          filePath = null;
 	
@@ -65,7 +62,7 @@ public class WavAudioRecorder {
 	private int                      aFormat;
 	
 	// Number of frames/samples written to file on each output(only in uncompressed mode)
-	private int                      framePeriod;
+	private int                      mPeriodInFrames;
 	
 	// Buffer for output(only in uncompressed mode)
 	private byte[]                   buffer;
@@ -89,24 +86,15 @@ public class WavAudioRecorder {
 	private AudioRecord.OnRecordPositionUpdateListener updateListener = new AudioRecord.OnRecordPositionUpdateListener() {
 		//	periodic updates on the progress of the record head
 		public void onPeriodicNotification(AudioRecord recorder) {
-			audioRecorder.read(buffer, 0, buffer.length); // read audio data to buffer
+			if (State.STOPPED == state) {
+				Log.d(WavAudioRecorder.this.getClass().getName(), "recorder stopped");
+				return;
+			}
+			int numOfBytes = audioRecorder.read(buffer, 0, buffer.length); // read audio data to buffer
+//			Log.d(WavAudioRecorder.this.getClass().getName(), state + ":" + numOfBytes);
 			try { 
 				randomAccessWriter.write(buffer); 		  // write audio data to file
 				payloadSize += buffer.length;
-				if (16 == mBitsPersample) {
-					for (int i = 0; i < buffer.length/2; i++) { // 16bit sample size
-						short curSample = getShort(buffer[i*2], buffer[i*2+1]);
-						if (curSample > cAmplitude) { // Check amplitude
-							cAmplitude = curSample;
-						}
-					}
-				} else { // 8bit sample size
-					for (int i = 0; i < buffer.length; i++) {
-						if (buffer[i] > cAmplitude) { // Check amplitude
-							cAmplitude = buffer[i];
-						}
-					}
-				}
 			} catch (IOException e) {
 				Log.e(WavAudioRecorder.class.getName(), "Error occured in updateListener, recording is aborted");
 				e.printStackTrace();
@@ -143,13 +131,13 @@ public class WavAudioRecorder {
 			sRate   = sampleRate;
 			aFormat = audioFormat;
 
-			framePeriod = sampleRate * TIMER_INTERVAL / 1000;		//?
-			mBufferSize = framePeriod * 2  * nChannels * mBitsPersample / 8;		//?
+			mPeriodInFrames = sampleRate * TIMER_INTERVAL / 1000;		//?
+			mBufferSize = mPeriodInFrames * 2  * nChannels * mBitsPersample / 8;		//?
 			if (mBufferSize < AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat)) { 
 				// Check to make sure buffer size is not smaller than the smallest allowed one 
 				mBufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat);
 				// Set frame period and timer interval accordingly
-				framePeriod = mBufferSize / ( 2 * mBitsPersample * nChannels / 8 );
+				mPeriodInFrames = mBufferSize / ( 2 * mBitsPersample * nChannels / 8 );
 				Log.w(WavAudioRecorder.class.getName(), "Increasing buffer size to " + Integer.toString(mBufferSize));
 			}
 			
@@ -159,8 +147,7 @@ public class WavAudioRecorder {
 				throw new Exception("AudioRecord initialization failed");
 			}
 			audioRecorder.setRecordPositionUpdateListener(updateListener);
-			audioRecorder.setPositionNotificationPeriod(framePeriod);
-			cAmplitude = 0;
+			audioRecorder.setPositionNotificationPeriod(mPeriodInFrames);
 			filePath = null;
 			state = State.INITIALIZING;
 		} catch (Exception e) {
@@ -194,23 +181,6 @@ public class WavAudioRecorder {
 		}
 	}
 	
-	/**
-	 * 
-	 * Returns the largest amplitude sampled since the last call to this method.
-	 * 
-	 * @return returns the largest amplitude since the last call, or 0 when not in recording state. 
-	 * 
-	 */
-	public int getMaxAmplitude() {
-		if (state == State.RECORDING) {
-			int result = cAmplitude;
-			cAmplitude = 0;
-			return result;
-		} else {
-			return 0;
-		}
-	}
-	
 
 	/**
 	 * 
@@ -240,7 +210,7 @@ public class WavAudioRecorder {
 					randomAccessWriter.writeShort(Short.reverseBytes(mBitsPersample)); // Bits per sample
 					randomAccessWriter.writeBytes("data");
 					randomAccessWriter.writeInt(0); // Data chunk size not known yet, write 0
-					buffer = new byte[framePeriod*mBitsPersample/8*nChannels];
+					buffer = new byte[mPeriodInFrames*mBitsPersample/8*nChannels];
 					state = State.READY;
 				} else {
 					Log.e(WavAudioRecorder.class.getName(), "prepare() method called on uninitialized recorder");
@@ -299,8 +269,12 @@ public class WavAudioRecorder {
 			if (state != State.ERROR) {
 				release();
 				filePath = null; // Reset file path
-				cAmplitude = 0; // Reset amplitude
-				audioRecorder = new AudioRecord(mAudioSource, sRate, nChannels+1, aFormat, mBufferSize);
+				audioRecorder = new AudioRecord(mAudioSource, sRate, nChannels, aFormat, mBufferSize);
+				if (audioRecorder.getState() != AudioRecord.STATE_INITIALIZED) {
+					throw new Exception("AudioRecord initialization failed");
+				}
+				audioRecorder.setRecordPositionUpdateListener(updateListener);
+				audioRecorder.setPositionNotificationPeriod(mPeriodInFrames);
 				state = State.INITIALIZING;
 			}
 		} catch (Exception e) {
@@ -357,14 +331,4 @@ public class WavAudioRecorder {
 			state = State.ERROR;
 		}
 	}
-	
-	/* 
-	 * 
-	 * Converts a byte[2] to a short, in LITTLE_ENDIAN format
-	 * e.g. [0x01][0x02] => 0x0201
-	 */
-	private short getShort(byte firstByte, byte secondByte) {
-		return (short)(firstByte | (secondByte << 8));
-	}
-	
 }

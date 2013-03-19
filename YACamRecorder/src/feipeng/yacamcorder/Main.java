@@ -133,7 +133,7 @@ public class Main extends Activity implements SurfaceHolder.Callback {
 			prMediaRecorder.setCamera(prCamera);
 			//set audio source as Microphone, video source as camera
 			//state: Initial=>Initialized
-			//prMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+			prMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 			prMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 			//set the file output format: 3gp or mp4
 			//state: Initialized=>DataSourceConfigured
@@ -154,7 +154,11 @@ public class Main extends Activity implements SurfaceHolder.Callback {
 			}
 			//the encoders: 
 			//audio: AMR-NB
-			prMediaRecorder.setAudioEncoder(AudioEncoder.AMR_NB);
+//			prMediaRecorder.setAudioEncoder(AudioEncoder.AMR_NB);
+//			prMediaRecorder.setAudioEncoder(AudioEncoder.AMR_WB);
+			prMediaRecorder.setAudioEncoder(AudioEncoder.AAC);
+//			prMediaRecorder.setAudioEncoder(AudioEncoder.AAC_ELD);
+//			prMediaRecorder.setAudioEncoder(AudioEncoder.HE_AAC);
 			//video: H.263, MP4-SP, or H.264
 			//prMediaRecorder.setVideoEncoder(VideoEncoder.H263);
 			//prMediaRecorder.setVideoEncoder(VideoEncoder.MPEG_4_SP);
