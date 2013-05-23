@@ -53,7 +53,6 @@ public class ValueAnimatorDemo2 extends Activity implements ValueAnimator.Animat
 		mImageAnimatorProxy = AnimatorProxy.wrap(mImageView);
 		
 		final FrameLayout container = (FrameLayout) this.findViewById(R.id.container);
-		final float mViewDim = Utils.convertDpToPixel(getApplicationContext(), 50);
 
 		final Button mBtnStart = (Button) this.findViewById(R.id.btnStart);
 		mBtnStart.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +61,7 @@ public class ValueAnimatorDemo2 extends Activity implements ValueAnimator.Animat
 				mOriX = mImageAnimatorProxy.getX();
 				mOriY = mImageAnimatorProxy.getY();
 				ValueAnimator mAnimator = ValueAnimator.ofObject(new PositionTypeEvaluator(), new Position(mOriX, mOriY),
-						new Position(container.getWidth() - mViewDim, 0));
+						new Position(container.getWidth() - mImageView.getWidth(), 0));
 				mAnimator.addUpdateListener(ValueAnimatorDemo2.this);
 				mAnimator.setDuration(1000);
 				mAnimator.start();

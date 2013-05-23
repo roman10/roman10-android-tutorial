@@ -28,7 +28,6 @@ public class ValueAnimatorDemo extends Activity implements ValueAnimator.Animato
 		mImageAnimatorProxy = AnimatorProxy.wrap(mImageView);
 		
 		final FrameLayout container = (FrameLayout) this.findViewById(R.id.container);
-		final float mViewDim = Utils.convertDpToPixel(getApplicationContext(), 50);
 		
 		final Button mBtnStart = (Button) this.findViewById(R.id.btnStart);
 		mBtnStart.setOnClickListener(new View.OnClickListener() {
@@ -36,7 +35,7 @@ public class ValueAnimatorDemo extends Activity implements ValueAnimator.Animato
 			public void onClick(View v) {
 				mOriX = mImageAnimatorProxy.getX();
 				mOriY = mImageAnimatorProxy.getY();
-				PropertyValuesHolder widthPropertyHolder = PropertyValuesHolder.ofFloat("posX", mImageAnimatorProxy.getX(), container.getWidth() - mViewDim);
+				PropertyValuesHolder widthPropertyHolder = PropertyValuesHolder.ofFloat("posX", mImageAnimatorProxy.getX(), container.getWidth() - mImageView.getWidth());
 				PropertyValuesHolder heightPropertyHolder = PropertyValuesHolder.ofFloat("posY", mImageAnimatorProxy.getY(), 0);
 				ValueAnimator mTranslationAnimator = ValueAnimator.ofPropertyValuesHolder(widthPropertyHolder, heightPropertyHolder);
 				mTranslationAnimator.addUpdateListener(ValueAnimatorDemo.this);
