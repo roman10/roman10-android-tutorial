@@ -6,5 +6,8 @@ TabMenu: A customized tab-based menu
 YACamRecorder: A video recoder example
 colorConversion: a color conversion example with assembly to speed up
 PropertyAnimation: demo apps for the Android-3.0 and above property animation system. 
+FrameAnimation: using ImageView to display a sequence of images as animation
+GifInWebview: display gif animation in webview
+InlineAnimation: display one or more animations (each animation is a sequence of images) at a TextView along with text. 
 
 Source code for Android NDK Cookbook can be found at: http://www.packtpub.com/android-native-development-kit-cookbook/book
