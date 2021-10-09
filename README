@@ -1,3 +1,5 @@
+Readme:-
+
 AndroidWaveRecorder: record pcm raw audio and put into a wave file in Android using AudioRecord class
 AndroidPCMRecorder: record pcm raw audio in Android using AudioRecord class
 CalendarOps: Android calendar operations 
